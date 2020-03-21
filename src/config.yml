@@ -1,0 +1,119 @@
+console_error_message: "&c&l(!)&e This command can only be executed by a player."
+player_offline_message: "&c&l(!)&e Could not find the specified player."
+console_player_error_message: "&c&l(!)&e An online player must be specified."
+no_perm_message: "&c&l(!)&e You do not have permission to do this."
+too_many_args_error: "&c&l(!)&e Too many arguments were provided."
+not_enough_args_error: "&c&l(!)&e Not enough arguments were provided."
+
+# Join/Leave Event Messages
+firstJoin_message: "&3&l(!)&b&l <player>&b joined the server for the first time!"
+join_message: "&3&l(!)&b &b&l<player>&b has joined the server."
+leave_message: "&4&l(!)&b &b&l<player>&b has left the server."
+
+CustomChatFormat: "<player>&7:&f <message>"
+
+GamemodeCommand:
+  current_gamemode_error: "&c&l(!)&e The targeted player's gamemode did not change."
+  gmc: "&6&l(!) &eYour gamemode has been set to &e&lCreative&e."
+  gms: "&6&l(!) &eYour gamemode has been set to &e&lSurvival&e."
+  gmsp: "&6&l(!) &eYour gamemode has been set to &e&lSpectator&e."
+  gma: "&6&l(!) &eYour gamemode has been set to &e&lAdventure&e."
+  gm_other_message: "&6&l(!)&e The gamemode of player &e&l<player>&e has been set to &e&l<gamemode>&e."
+  other_player_current_gamemode_error: "&c&l(!)&e The targeted player's gamemode did not change."
+  
+CommandSpy:
+  message: "&6&l(!)&e&l <player>&e ran the command: &f<cmd>"
+  cmdspy_enabled: "&6&l(!)&e You have enabled Command-Spy."
+  cmdspy_disabled: "&6&l(!)&e You have disabled Command-Spy."
+  cmdspy_bypass_on: "&6&l(!)&e You are now exempt from Command-Spy."
+  cmdspy_bypass_off: "&6&l(!)&e You are no longer exempt from Command-Spy."
+  args_error: "&c&l(!)&e Invalid argument. Accepted arguments: on, off, bypass, toggle."
+  cmdspy_currently_disabled: "&c&l(!)&e You cannot execute this command; Command-Spy is currently disabled."
+  cmdspy_already_enabled: "&c&l(!)&e Command-Spy is already enabled."
+  cmdspy_already_disabled: "&c&l(!)&e Command-Spy is already disabled."
+  cmdspy_global_enabled: "&6&l(!)&e Command Spy has been enabled."
+  cmdspy_global_disabled: "&6&l(!)&e &7Command Spy has been disabled."
+
+FlyCommand:
+  flying_enabled: "&6&l(!)&e You can now fly."
+  flying_disabled: "&6&l(!)&e You can no longer fly."
+  flying_target_enabled: "&6&l(!)&e You have enabled flight for &e&l<target>&e."
+  flying_target_disabled: "&6&l(!)&e You have disabled flight for &e&l<target>&e."
+  no_perm_message: "&c&l(!)&e You do not have permission to do this."
+  
+ChatCommand:
+  chat_help: "&c&l(!)&e Invalid argument. Accepted arguments: clear, toggle."
+  chat_cleared_message: "&6&l(!)&e The chat has been cleared."
+  chat_locked_message: "&6&l(!)&e The chat has been locked.'
+  chat_locked_player_message: "&c&l(!)&e You cannot send this message; The chat is currently locked."
+  chat_unlocked_message: "&6&l(!)&e The chat has been unlocked."
+  chat_locked_staff_message: "&6&l(!)&e The chat has been locked by &e&l<player>&e."
+  chat_unlocked_staff_message: "&6&l(!)&e The chat has been unlocked by &e&l<player>&e."
+  
+ClearCommand:
+  specified_player_error: "&4&l(!)&c An online player must be specified! Proper usage: /clear <player>"
+  clear_message: "&6&l(!)&e The inventory of <player>&e has been cleared."
+  clear_error: "&4&l(!)&c There were no items in the inventory of <player>&c to clear."
+
+InvSeeCommand:
+  inv_opened_message: "&6&l(!)&e Successfully accessed the inventory of &e&l<player>&e."
+  argument_error: "&c&l(!)&e Not enough arguments were provided. Correct format: /invsee <player>"
+  
+InvincibleCommand:
+  invc_enabled: "&6&l(!)&e You are now invulnerable."
+  invc_disabled: "&6&l(!)&e You are no longer invulnerable."
+  invc_target_enabled: "&6&l(!)&e You have enabled invulnerability for &e&l<target>&e."
+  invc_target_disabled: "&6&l(!)&e You have disabled invulnerability for &e&l<target>&e."
+  player_specify_message: "&c&l(!)&e Not enough arguments were provided. Correct format: /invincible <player>"
+  too_many_args_message: "&c&l(!)&e Too many arguments were provided. Correct format: /invincible <player>"
+  no_perm_message: '&c&l(!)&e You do not have permission to do this."
+
+VanishCommand:
+  vanish_on_message: "&6&l(!)&e You are now invisible."
+  vanish_off_message: "&6&l(!)&e You are no longer invisible."
+  vanish_other_on_message: "&6&l(!)&e &e&l<player>&e is now invisible."
+  vanish_other_off_message: "&6&l(!)&e &e&l<player>&e is no longer invisible."
+
+BroadcastCommand:
+  args_error: "&c&l(!)&e Not arguments were provided. Correct format: /broadcast <message>"
+  
+PlayerinfoCommand:
+  too_many_args_message: "&c&l(!)&e Too many arguments were provided. Correct format: /playerinfo <player>"
+  not_enough_args_message: "&c&l(!)&e Not enough arguments were provided. Correct format: /playerinfo <player>"
+  
+AFK:
+  afk_enabled: "&6&l(!)&e &e&l<player>&e is now idle."
+  afk_disabled: "&6&l(!)&e &e&l<player>&b is no longer idle." 
+  too_many_args: "&4&l(!)&c Too many arguments were provided. Correct format: /afk"
+  
+StaffChat:
+  sc_message: '&5&l[&d&lSC&5&l]&7 <player>&7:&f <msg>'
+  sc_enabled: '&2&l›&a You have enabled Staff-Chat.'
+  sc_disabled: '&2&l›&a You have disabled Staff-Chat.'
+  arg_error: '&4&l›&c Too many arguments were provided. Usage: /sc'
+  
+HealCommand:
+  heal: '&6&l(!)&e You have been healed'
+  heal_other: '&6&l(!)&e <target> has been healed'
+
+BackCommand:
+  back_success_message: '&6&l(!)&e Teleported to your last location'
+  back_error_message: '&6&l(!)&4 There was no previous location stored for you to be teleported to'
+  
+SeeCommand:
+  see_other_message: '&6&l(!)&e <toggle> the infinite vision of &e&l<target>'
+  see_message: '&6&l(!)&e Your infinite vision has been &e&l<toggle>'
+  
+ToggleBlockModify:
+  argument_error: '&c&l(!)&e Not enough arguments were provided! Correct format: /toggleblockmodify <player>'
+  toggle_enabled: '&6&l(!)&e <player>&e can no longer modify blocks'
+  toggle_disabled: '&6&l(!)&e <player>&e can now modify blocks'
+  
+ConsoleCommand:
+  argument_error: "&c&l(!)&e Not enough arguments were provided! Correct format: /console <command>"
+  console_command_message: "&6&l(!)&e Console has executed the command. Check command output to see if it was successful."
+
+PingCommand:
+  argument_error: "&c&l(!)&e Correct usage: /ping <player>"
+  ping_message: "&6&l(!)&e <player>'s ping: <ping>ms"
+  

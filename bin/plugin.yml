@@ -1,0 +1,44 @@
+name: HS-Core
+version: 1.0
+author: RySty
+main: mc.rysty.heliosphereplugin.HelioSpherePlugin
+
+commands:
+  gma:
+  gmc:
+  gmsp:
+  gms: 
+  commandspy:
+    aliases: [cmdspy]
+  broadcast:
+    aliases: [bcast]
+  fly:
+  chat:
+  clear:
+    aliases: [ci]
+  invsee:
+    aliases: [inventorysee]
+  echest:
+    aliases: [enderchest, ec, echest]
+  playerinfo:
+    aliases: [whois]
+  serverinfo:
+    aliases: [sinfo]
+  invincible:
+  hs-core:
+  afk:
+    aliases: [idle]
+  nickname:
+    aliases: [nick]
+  staffchat:
+    aliases: [sc]
+  toggleblockmodify:
+  vanish: 
+    aliases: [v]
+  heal:
+  back:
+  see:
+  say:
+  console:
+  ping:
+  i:

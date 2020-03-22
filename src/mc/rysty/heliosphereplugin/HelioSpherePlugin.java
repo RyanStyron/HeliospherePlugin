@@ -44,7 +44,7 @@ public class HelioSpherePlugin extends JavaPlugin {
 		return plugin;
 	}
 
-	PluginManager pm = Bukkit.getPluginManager();
+	private PluginManager pluginManager = Bukkit.getPluginManager();
 
 	public void onEnable() {
 		plugin = this;
@@ -72,10 +72,10 @@ public class HelioSpherePlugin extends JavaPlugin {
 		new Ping(this);
 		new GiveAliasCommand(this);
 
-		pm.registerEvents(new UpdateDataYaml(), this);
-		pm.registerEvents(new JoinLeaveMessages(), this);
-		pm.registerEvents(new CommandSpy(), this);
-		pm.registerEvents(new CustomChatFormat(), this);
+		pluginManager.registerEvents(new UpdateDataYaml(), this);
+		pluginManager.registerEvents(new JoinLeaveMessages(), this);
+		pluginManager.registerEvents(new CommandSpy(), this);
+		pluginManager.registerEvents(new CustomChatFormat(), this);
 
 		new ChatCommands(this);
 		new AFK(this);
@@ -83,12 +83,12 @@ public class HelioSpherePlugin extends JavaPlugin {
 		new ToggleBlockModify(this);
 		new Vanish(this);
 		new Back(this);
-		pm.registerEvents(new ChatCommands(this), this);
-		pm.registerEvents(new AFK(this), this);
-		pm.registerEvents(new StaffChat(this), this);
-		pm.registerEvents(new ToggleBlockModify(this), this);
-		pm.registerEvents(new Vanish(this), this);
-		pm.registerEvents(new Back(this), this);
+		pluginManager.registerEvents(new ChatCommands(this), this);
+		pluginManager.registerEvents(new AFK(this), this);
+		pluginManager.registerEvents(new StaffChat(this), this);
+		pluginManager.registerEvents(new ToggleBlockModify(this), this);
+		pluginManager.registerEvents(new Vanish(this), this);
+		pluginManager.registerEvents(new Back(this), this);
 
 		System.out.println("HS-Core enabled");
 	}

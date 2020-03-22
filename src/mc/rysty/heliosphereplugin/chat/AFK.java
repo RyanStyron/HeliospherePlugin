@@ -32,37 +32,36 @@ public class AFK implements CommandExecutor, Listener {
 	}
 
 	private Server server = Bukkit.getServer();
+	private String afkDisabledMessage = MessageUtils.chat(config.getString("AFK.afk_disabled"));
+	private String afkEnabledMessage = MessageUtils.chat(config.getString("AFK.afk_enabled"));
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		String afkDisabled = MessageUtils.chat(config.getString("AFK.afk_disabled"));
-		String afkEnabled = MessageUtils.chat(config.getString("AFK.afk_enabled"));
-
 		if (command.getName().equalsIgnoreCase("afk")) {
 			if (sender.hasPermission("hs.afk")) {
 				if (!(sender instanceof Player)) {
-					sender.sendMessage(MessageUtils.chat(config.getString("console_error_message")));
+					MessageUtils.message(sender, config.getString("console_error_message"));
 					return false;
 				}
 				Player player = (Player) sender;
-				UUID pId = player.getUniqueId();
-				String pDName = player.getDisplayName();
+				UUID playerId = player.getUniqueId();
+				String displayName = player.getDisplayName();
 
 				if (args.length == 0) {
-					if (data.getString("users." + pId + ".afk") == null) {
-						data.set("users." + pId + ".afk", "true");
+					if (data.getString("users." + playerId + ".afk") == null) {
+						data.set("users." + playerId + ".afk", "true");
 						settings.saveData();
-						server.broadcastMessage(afkEnabled.replaceAll("<player>", pDName));
-					} else if (data.getString("users." + pId + ".afk") != null) {
-						data.set("users." + pId + ".afk", null);
+						server.broadcastMessage(afkEnabledMessage.replaceAll("<player>", displayName));
+					} else if (data.getString("users." + playerId + ".afk") != null) {
+						data.set("users." + playerId + ".afk", null);
 						settings.saveData();
-						server.broadcastMessage(afkDisabled.replaceAll("<player>", pDName));
+						server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", displayName));
 					}
 				} else {
-					player.sendMessage(MessageUtils.chat(config.getString("AFK.too_many_args")));
+					MessageUtils.message(player, config.getString("AFK.too_many_args"));
 				}
 			} else {
-				sender.sendMessage(MessageUtils.chat(config.getString("no_perm_message")));
+				MessageUtils.message(sender, config.getString("no_perm_message"));
 			}
 		}
 		return false;
@@ -70,20 +69,18 @@ public class AFK implements CommandExecutor, Listener {
 
 	@EventHandler
 	public void onPlayerUnactive(PlayerMoveEvent event) {
-
 	}
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
-		UUID pId = player.getUniqueId();
-		String pDName = player.getDisplayName();
-		String afkDisabled = MessageUtils.chat(config.getString("AFK.afk_disabled"));
+		UUID playerId = player.getUniqueId();
+		String displayName = player.getDisplayName();
 
-		if (data.getString("users." + pId + ".afk") != null) {
-			data.set("users." + pId + ".afk", null);
+		if (data.getString("users." + playerId + ".afk") != null) {
+			data.set("users." + playerId + ".afk", null);
 			settings.saveData();
-			server.broadcastMessage(afkDisabled.replaceAll("<player>", pDName));
+			server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", displayName));
 		}
 	}
 
@@ -92,27 +89,25 @@ public class AFK implements CommandExecutor, Listener {
 		Player player = event.getPlayer();
 		UUID pId = player.getUniqueId();
 		String pDName = player.getDisplayName();
-		String afkDisabled = MessageUtils.chat(config.getString("AFK.afk_disabled"));
 
 		if (data.getString("users." + pId + ".afk") != null) {
 			data.set("users." + pId + ".afk", null);
 			settings.saveData();
-			server.broadcastMessage(afkDisabled.replaceAll("<player>", pDName));
+			server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", pDName));
 		}
 	}
 
 	@EventHandler
 	public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
-		UUID pId = player.getUniqueId();
-		String pDName = player.getDisplayName();
-		String afkDisabled = MessageUtils.chat(config.getString("AFK.afk_disabled"));
+		UUID playerId = player.getUniqueId();
+		String displayName = player.getDisplayName();
 
 		if (event.getMessage().startsWith("/")) {
-			if (data.getString("users." + pId + ".afk") != null) {
-				data.set("users." + pId + ".afk", null);
+			if (data.getString("users." + playerId + ".afk") != null) {
+				data.set("users." + playerId + ".afk", null);
 				settings.saveData();
-				server.broadcastMessage(afkDisabled.replaceAll("<player>", pDName));
+				server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", displayName));
 			}
 		}
 	}
@@ -120,10 +115,10 @@ public class AFK implements CommandExecutor, Listener {
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-		UUID pId = player.getUniqueId();
+		UUID playerId = player.getUniqueId();
 
-		if (data.getString("users." + pId + ".afk") != null) {
-			data.set("users." + pId + ".afk", null);
+		if (data.getString("users." + playerId + ".afk") != null) {
+			data.set("users." + playerId + ".afk", null);
 			settings.saveData();
 		}
 	}

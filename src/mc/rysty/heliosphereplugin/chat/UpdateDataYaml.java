@@ -57,12 +57,10 @@ public class UpdateDataYaml implements Listener {
 
 		if (data.getString("users." + playerId + ".username") != playerName) {
 			data.set("users." + playerId + ".username", playerName);
-			settings.saveData();
 		}
-
 		if (data.getString("users." + playerId + ".displayname") != displayName) {
 			data.set("users." + playerId + ".displayname", displayName);
-			settings.saveData();
 		}
+		settings.saveData();
 	}
 }

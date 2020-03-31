@@ -28,8 +28,9 @@ public class Broadcast implements CommandExecutor {
 					for (int i = 0; i < args.length; i++) {
 						msg = msg + args[i] + " ";
 					}
-					Bukkit.broadcastMessage(MessageUtils.chat(msg.replaceAll("&", "§")));
-					Bukkit.getOnlinePlayers().forEach(players -> players.playSound(players.getLocation(), "block.note_block.harp", 2, 1));
+					Bukkit.broadcastMessage(MessageUtils.chat(msg));
+					Bukkit.getOnlinePlayers().forEach(
+							players -> players.playSound(players.getLocation(), "block.note_block.harp", 2, 1));
 				} else {
 					sender.sendMessage(MessageUtils.chat(config.getString("BroadcastCommand.args_error")));
 				}

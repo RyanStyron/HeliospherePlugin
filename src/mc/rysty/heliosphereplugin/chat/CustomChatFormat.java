@@ -16,15 +16,9 @@ public class CustomChatFormat implements Listener {
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event) {
 		String dName = "%s";
-		String msg = "%s".replaceAll("&", "§");
+		String msg = "%s";
 		String customChatFormat = MessageUtils.chat(config.getString("CustomChatFormat"));
 
-		if (!msg.contains("&")) {
-			event.setFormat(
-					customChatFormat.replaceAll("<player>", dName).replaceAll("<message>", msg));
-		} else {
-			event.setFormat(
-					customChatFormat.replaceAll("<player>", dName).replaceAll("<message>", msg.replaceAll("&", "§")));
-		}
+		event.setFormat(MessageUtils.chat(customChatFormat.replaceAll("<player>", dName).replaceAll("<message>", msg)));
 	}
 }

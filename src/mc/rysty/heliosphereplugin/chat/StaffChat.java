@@ -82,14 +82,12 @@ public class StaffChat implements CommandExecutor, Listener {
 				event.setCancelled(true);
 				for (Player s : server.getOnlinePlayers()) {
 					if (s.hasPermission("hs.sc.see")) {
-						s.sendMessage(
-								scMessage.replaceAll("<msg>", m.replaceAll("&", "�")).replaceAll("<player>", dName));
+						s.sendMessage(scMessage.replaceAll("<msg>", MessageUtils.chat(m)).replaceAll("<player>",
+								MessageUtils.chat(dName)));
 					}
 				}
-				if (console.hasPermission("hs.sc.see")) {
-					console.sendMessage(
-							scMessage.replaceAll("<msg>", m.replaceAll("&", "�")).replaceAll("<player>", dName));
-				}
+				console.sendMessage(scMessage.replaceAll("<msg>", MessageUtils.chat(m)).replaceAll("<player>",
+						MessageUtils.chat(dName)));
 			} else {
 				data.set("users." + playerId + ".staffchat", null);
 				settings.saveData();

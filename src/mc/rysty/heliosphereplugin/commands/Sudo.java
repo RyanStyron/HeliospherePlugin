@@ -29,7 +29,7 @@ public class Sudo implements CommandExecutor {
                         }
 
                         if (sudoString.startsWith("/"))
-                            Bukkit.dispatchCommand(target, sudoString);
+                            Bukkit.dispatchCommand(target, sudoString.replace("/", ""));
                         else
                             target.chat(MessageUtils.chat(sudoString));
 

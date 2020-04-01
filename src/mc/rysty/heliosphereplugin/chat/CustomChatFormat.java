@@ -15,10 +15,11 @@ public class CustomChatFormat implements Listener {
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event) {
-		String dName = "%s";
-		String msg = "%s";
+		String playerDisplayName = "%s";
+		String message = "%s";
 		String customChatFormat = config.getString("CustomChatFormat");
 
-		event.setFormat(MessageUtils.chat(customChatFormat.replaceAll("<player>", dName).replaceAll("<message>", msg)));
+		event.setFormat(customChatFormat.replaceAll("<player>", playerDisplayName).replaceAll("<message>",
+				MessageUtils.chat(message)));
 	}
 }

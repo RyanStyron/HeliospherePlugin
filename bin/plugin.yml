@@ -42,3 +42,4 @@ commands:
   console:
   ping:
   i:
+  sudo:

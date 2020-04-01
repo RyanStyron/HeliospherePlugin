@@ -25,6 +25,7 @@ import mc.rysty.heliosphereplugin.commands.PlayerInfo;
 import mc.rysty.heliosphereplugin.commands.Reload;
 import mc.rysty.heliosphereplugin.commands.See;
 import mc.rysty.heliosphereplugin.commands.ServerInfo;
+import mc.rysty.heliosphereplugin.commands.Sudo;
 import mc.rysty.heliosphereplugin.commands.ToggleBlockModify;
 import mc.rysty.heliosphereplugin.commands.Vanish;
 import mc.rysty.heliosphereplugin.commands.gamemode.GMA;
@@ -71,6 +72,7 @@ public class HelioSpherePlugin extends JavaPlugin {
 		new Console(this);
 		new Ping(this);
 		new GiveAliasCommand(this);
+		new Sudo(this);
 
 		pluginManager.registerEvents(new UpdateDataYaml(), this);
 		pluginManager.registerEvents(new JoinLeaveMessages(), this);
@@ -96,5 +98,4 @@ public class HelioSpherePlugin extends JavaPlugin {
 	public void onDisable() {
 		System.out.println("HS-Core disabled");
 	}
-
 }

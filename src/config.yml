@@ -88,9 +88,9 @@ AFK:
   
 StaffChat:
   sc_message: '&5&l[&d&lSC&5&l]&7 <player>&7:&f <msg>'
-  sc_enabled: '&2&l›&a You have enabled Staff-Chat.'
-  sc_disabled: '&2&l›&a You have disabled Staff-Chat.'
-  arg_error: '&4&l›&c Too many arguments were provided. Usage: /sc'
+  sc_enabled: '&2&lï¿½&a You have enabled Staff-Chat.'
+  sc_disabled: '&2&lï¿½&a You have disabled Staff-Chat.'
+  arg_error: '&4&lï¿½&c Too many arguments were provided. Usage: /sc'
   
 HealCommand:
   heal: '&6&l(!)&e You have been healed'
@@ -116,4 +116,7 @@ ConsoleCommand:
 PingCommand:
   argument_error: "&c&l(!)&e Correct usage: /ping <player>"
   ping_message: "&6&l(!)&e <player>'s ping: <ping>ms"
+
+Sudo:
+  argument-error: "&4&l(!)&c A valid amount of arguments must be provded! Usage: /sudo <player> <command/message>"
   

@@ -1,5 +1,5 @@
 console_error_message: "&c&l(!)&e This command can only be executed by a player."
-player_offline_message: "&c&l(!)&e Could not find the specified player."
+player_offline_message: "&4&l(!)&c A valid player must be specified."
 console_player_error_message: "&c&l(!)&e An online player must be specified."
 no_perm_message: "&c&l(!)&e You do not have permission to do this."
 too_many_args_error: "&c&l(!)&e Too many arguments were provided."
@@ -44,7 +44,7 @@ FlyCommand:
 ChatCommand:
   chat_help: "&c&l(!)&e Invalid argument. Accepted arguments: clear, toggle."
   chat_cleared_message: "&6&l(!)&e The chat has been cleared."
-  chat_locked_message: "&6&l(!)&e The chat has been locked.'
+  chat_locked_message: "&6&l(!)&e The chat has been locked."
   chat_locked_player_message: "&c&l(!)&e You cannot send this message; The chat is currently locked."
   chat_unlocked_message: "&6&l(!)&e The chat has been unlocked."
   chat_locked_staff_message: "&6&l(!)&e The chat has been locked by &e&l<player>&e."
@@ -66,7 +66,7 @@ InvincibleCommand:
   invc_target_disabled: "&6&l(!)&e You have disabled invulnerability for &e&l<target>&e."
   player_specify_message: "&c&l(!)&e Not enough arguments were provided. Correct format: /invincible <player>"
   too_many_args_message: "&c&l(!)&e Too many arguments were provided. Correct format: /invincible <player>"
-  no_perm_message: '&c&l(!)&e You do not have permission to do this."
+  no_perm_message: "&c&l(!)&e You do not have permission to do this."
 
 VanishCommand:
   vanish_on_message: "&6&l(!)&e You are now invisible."
@@ -87,10 +87,10 @@ AFK:
   too_many_args: "&4&l(!)&c Too many arguments were provided. Correct format: /afk"
   
 StaffChat:
-  sc_message: '&5&l[&d&lSC&5&l]&7 <player>&7:&f <msg>'
-  sc_enabled: '&2&l�&a You have enabled Staff-Chat.'
-  sc_disabled: '&2&l�&a You have disabled Staff-Chat.'
-  arg_error: '&4&l�&c Too many arguments were provided. Usage: /sc'
+  sc_message: "&5&l[&d&lSC&5&l]&7 <player>&7:&f <msg>"
+  sc_enabled: "&6&l(!)&e You have enabled Staff-Chat."
+  sc_disabled: '&6&l(!)&e You have disabled Staff-Chat.'
+  arg_error: '&4&l(!)&c Too many arguments were provided. Usage: /sc'
   
 HealCommand:
   heal: '&6&l(!)&e You have been healed'
@@ -119,4 +119,5 @@ PingCommand:
 
 Sudo:
   argument-error: "&4&l(!)&c A valid amount of arguments must be provded! Usage: /sudo <player> <command/message>"
+  sudo-message: "&6&l(!)&e <player>&e has been sudoed."
   

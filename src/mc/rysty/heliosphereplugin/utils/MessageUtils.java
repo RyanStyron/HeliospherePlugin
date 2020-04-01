@@ -21,4 +21,9 @@ public class MessageUtils {
 	public static void configStringMessage(CommandSender sender, String configString) {
 		message(sender, config.getString(configString));
 	}
+
+	public static void configStringMessage(CommandSender sender, String configString, String regex,
+			String replacement) {
+		message(sender, config.getString(configString).replaceAll(regex, replacement));
+	}
 }

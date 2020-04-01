@@ -20,8 +20,25 @@ public class Sudo implements CommandExecutor {
             if (sender.hasPermission("hs.sudo")) {
                 if (args.length > 1) {
                     Player target = Bukkit.getPlayer(args[0]);
-                } else 
-                MessageUtils.configStringMessage(sender, "Sudo.argument-error");
+
+                    if (target != null) {
+                        String sudoString = "";
+
+                        for (int i = 1; i < args.length; i++) {
+                            sudoString += args[i] + " ";
+                        }
+
+                        if (sudoString.startsWith("/"))
+                            Bukkit.dispatchCommand(target, sudoString);
+                        else
+                            target.chat(MessageUtils.chat(sudoString));
+
+                        MessageUtils.configStringMessage(sender, "Sudo.sudo-message", "<player>",
+                                target.getDisplayName());
+                    } else
+                        MessageUtils.configStringMessage(sender, "player_offline_message");
+                } else
+                    MessageUtils.configStringMessage(sender, "Sudo.argument-error");
             } else
                 MessageUtils.configStringMessage(sender, "no_perm_error");
         }

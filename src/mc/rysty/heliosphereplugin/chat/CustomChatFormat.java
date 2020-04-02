@@ -17,9 +17,13 @@ public class CustomChatFormat implements Listener {
 	public void onChat(AsyncPlayerChatEvent event) {
 		String playerDisplayName = "%s";
 		String message = "%s";
-		String customChatFormat = config.getString("CustomChatFormat");
+		String customChatFormat = convertChatColors(config.getString("CustomChatFormat"));
 
 		event.setFormat(customChatFormat.replaceAll("<player>", playerDisplayName).replaceAll("<message>",
-				MessageUtils.chat(message)));
+				convertChatColors(message)));
+	}
+
+	private String convertChatColors(String string) {
+		return MessageUtils.chat(string);
 	}
 }

@@ -14,7 +14,6 @@ import mc.rysty.heliosphereplugin.chat.JoinLeaveMessages;
 import mc.rysty.heliosphereplugin.chat.SayCommand;
 import mc.rysty.heliosphereplugin.chat.StaffChat;
 import mc.rysty.heliosphereplugin.chat.UpdateDataYaml;
-import mc.rysty.heliosphereplugin.commands.Back;
 import mc.rysty.heliosphereplugin.commands.Console;
 import mc.rysty.heliosphereplugin.commands.Fly;
 import mc.rysty.heliosphereplugin.commands.GiveAliasCommand;
@@ -84,13 +83,11 @@ public class HelioSpherePlugin extends JavaPlugin {
 		new StaffChat(this);
 		new ToggleBlockModify(this);
 		new Vanish(this);
-		new Back(this);
 		pluginManager.registerEvents(new ChatCommands(this), this);
 		pluginManager.registerEvents(new AFK(this), this);
 		pluginManager.registerEvents(new StaffChat(this), this);
 		pluginManager.registerEvents(new ToggleBlockModify(this), this);
 		pluginManager.registerEvents(new Vanish(this), this);
-		pluginManager.registerEvents(new Back(this), this);
 
 		System.out.println("HS-Core enabled");
 	}

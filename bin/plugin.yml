@@ -36,7 +36,6 @@ commands:
   vanish: 
     aliases: [v]
   heal:
-  back:
   see:
   say:
   console:

@@ -14,6 +14,7 @@ import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.chat.ChatCommands;
 import mc.rysty.heliosphereplugin.chat.CommandSpy;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
+import mc.rysty.heliosphereplugin.utils.VersionUtils;
 
 public class ServerInfo implements CommandExecutor {
 
@@ -32,7 +33,7 @@ public class ServerInfo implements CommandExecutor {
 				ChatColor yellow = ChatColor.YELLOW;
 				Server server = Bukkit.getServer();
 				String serverName = Bukkit.getName();
-				String serverVersion = server.getVersion().toString();
+				String serverVersion = VersionUtils.getServerVersion();
 				String serverIp = server.getIp().toString();
 				int opSize = server.getOperators().size();
 				int banSize = server.getBannedPlayers().size();

@@ -12,8 +12,8 @@ import mc.rysty.heliosphereplugin.utils.MessageUtils;
 
 public class Fly implements CommandExecutor {
 
-	HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
-	FileConfiguration config = plugin.getConfig();
+	private HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
+	private FileConfiguration config = plugin.getConfig();
 
 	public Fly(HelioSpherePlugin plugin) {
 		plugin.getCommand("fly").setExecutor(this);
@@ -53,15 +53,17 @@ public class Fly implements CommandExecutor {
 								target.setAllowFlight(false);
 								target.setFlying(false);
 								target.sendMessage(MessageUtils.chat(config.getString("FlyCommand.flying_disabled")));
-								sender.sendMessage(MessageUtils.chat(config.getString("FlyCommand.flying_target_disabled")
-										.replaceAll("<target>", target.getDisplayName())));
+								sender.sendMessage(
+										MessageUtils.chat(config.getString("FlyCommand.flying_target_disabled")
+												.replaceAll("<target>", target.getDisplayName())));
 								return true;
 							} else {
 								target.setAllowFlight(true);
 								target.setFlying(true);
 								target.sendMessage(MessageUtils.chat(config.getString("FlyCommand.flying_enabled")));
-								sender.sendMessage(MessageUtils.chat(config.getString("FlyCommand.flying_target_enabled")
-										.replaceAll("<target>", target.getDisplayName())));
+								sender.sendMessage(
+										MessageUtils.chat(config.getString("FlyCommand.flying_target_enabled")
+												.replaceAll("<target>", target.getDisplayName())));
 							}
 					} else {
 						sender.sendMessage(MessageUtils.chat(config.getString("FlyCommand.no_perm_message")));
@@ -70,9 +72,8 @@ public class Fly implements CommandExecutor {
 					sender.sendMessage(MessageUtils.chat(config.getString("too_many_args_error")));
 					return false;
 				}
-			} else {
-				sender.sendMessage(MessageUtils.chat(config.getString("no_perm_message")));
-			}
+			} else
+				MessageUtils.noPermissionError(sender);
 		}
 		return false;
 	}

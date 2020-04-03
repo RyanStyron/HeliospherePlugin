@@ -1,5 +1,6 @@
 package mc.rysty.heliosphereplugin.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,5 +26,13 @@ public class MessageUtils {
 	public static void configStringMessage(CommandSender sender, String configString, String regex,
 			String replacement) {
 		message(sender, config.getString(configString).replaceAll(regex, replacement));
+	}
+
+	public static void noPermissionError(CommandSender sender) {
+		configStringMessage(sender, "no_perm_message");
+	}
+
+	public static void consoleError() {
+		configStringMessage(Bukkit.getConsoleSender(), "console_error_message");
 	}
 }

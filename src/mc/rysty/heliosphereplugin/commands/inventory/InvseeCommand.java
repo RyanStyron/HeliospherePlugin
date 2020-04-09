@@ -1,4 +1,4 @@
-package mc.rysty.heliosphereplugin.inventory;
+package mc.rysty.heliosphereplugin.commands.inventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

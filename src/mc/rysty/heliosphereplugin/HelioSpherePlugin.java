@@ -31,9 +31,9 @@ import mc.rysty.heliosphereplugin.commands.gamemode.GMA;
 import mc.rysty.heliosphereplugin.commands.gamemode.GMC;
 import mc.rysty.heliosphereplugin.commands.gamemode.GMS;
 import mc.rysty.heliosphereplugin.commands.gamemode.GMSP;
-import mc.rysty.heliosphereplugin.inventory.ClearInventory;
-import mc.rysty.heliosphereplugin.inventory.EnderChestCommand;
-import mc.rysty.heliosphereplugin.inventory.InvseeCommand;
+import mc.rysty.heliosphereplugin.commands.inventory.ClearInventory;
+import mc.rysty.heliosphereplugin.commands.inventory.EnderChestCommand;
+import mc.rysty.heliosphereplugin.commands.inventory.InvseeCommand;
 import mc.rysty.heliosphereplugin.utils.SettingsManager;
 
 public class HelioSpherePlugin extends JavaPlugin {

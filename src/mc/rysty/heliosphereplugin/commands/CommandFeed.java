@@ -34,7 +34,7 @@ public class CommandFeed implements CommandExecutor {
                     target.setFoodLevel(20);
                     MessageUtils.configStringMessage(sender, "FeedCommand.feed-message", "<player>", displayName);
                     if (target != sender)
-                        MessageUtils.configStringMessage(sender, "FeedCommand.feed-player-message");
+                        MessageUtils.configStringMessage(target, "FeedCommand.feed-player-message");
                 }
             } else
                 MessageUtils.noPermissionError(sender);

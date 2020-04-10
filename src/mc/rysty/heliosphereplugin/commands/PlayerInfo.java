@@ -3,7 +3,6 @@ package mc.rysty.heliosphereplugin.commands;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,10 +17,10 @@ import mc.rysty.heliosphereplugin.utils.MessageUtils;
 
 public class PlayerInfo implements CommandExecutor {
 
-	HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
-	FileConfiguration config = plugin.getConfig();
-	SettingsManager settings = SettingsManager.getInstance();
-	FileConfiguration data = settings.getData();
+	private HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
+	private FileConfiguration config = plugin.getConfig();
+	private SettingsManager settings = SettingsManager.getInstance();
+	private FileConfiguration data = settings.getData();
 
 	public PlayerInfo(HelioSpherePlugin plugin) {
 		plugin.getCommand("playerinfo").setExecutor(this);
@@ -32,63 +31,45 @@ public class PlayerInfo implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("playerinfo")) {
 			if (sender.hasPermission("hs.playerinfo")) {
 				if (args.length == 1) {
-					Player t = Bukkit.getPlayer(args[0]);
+					Player target = Bukkit.getPlayer(args[0]);
 
-					if (t == null) {
+					if (target == null) {
 						sender.sendMessage(MessageUtils.chat(config.getString("player_offline_message")));
-						return false;
 					} else {
-						UUID targetId = t.getUniqueId();
-						String tDName = t.getDisplayName();
-						Location location = t.getLocation();
-						ChatColor gold = ChatColor.GOLD;
-						ChatColor yellow = ChatColor.YELLOW;
-						String locationW = location.getWorld().getName();
+						UUID targetId = target.getUniqueId();
+						String displayName = target.getDisplayName();
+						Location location = target.getLocation();
+						String locationWorldName = location.getWorld().getName();
 						double locationX = location.getBlockX();
 						double locationY = location.getBlockY();
 						double locationZ = location.getBlockZ();
-						// int ping = ((CraftPlayer) t).getHandle().ping;
-						CommandSender s = sender;
 
-						s.sendMessage(ChatColor.DARK_AQUA + "==" + gold + "Player Information: " + yellow + t.getName()
-								+ ChatColor.DARK_AQUA + "==");
-						s.sendMessage(gold + "Display Name: " + yellow + tDName);
-						s.sendMessage(gold + "UUID: " + yellow + t.getUniqueId().toString());
-						s.sendMessage(gold + "IP Address: " + yellow + t.getAddress().getAddress());
-						// p.sendMessage(ChatColor.GOLD + "Ping: " + ChatColor.YELLOW + ping + "ms");
-						s.sendMessage(gold + "Gamemode: " + yellow + t.getGameMode().toString());
-						s.sendMessage(gold + "Health: " + yellow + t.getHealth());
-						s.sendMessage(gold + "World: " + yellow + locationW);
-						s.sendMessage(gold + "Coordinates: " + yellow + "X: " + locationX + ", Y: " + locationY
-								+ ", Z: " + locationZ);
+						MessageUtils.message(sender, "&3==&6Player Information: &e" + target.getName() + "&3==");
+						MessageUtils.message(sender, "&6Display Name: &e" + displayName);
+						MessageUtils.message(sender, "&6UUID: &e" + targetId);
+						MessageUtils.message(sender, "&6IP Address: &e" + target.getAddress());
+						MessageUtils.message(sender, "&6Gamemode: &e" + target.getGameMode().toString());
+						MessageUtils.message(sender, "&6Health: &3" + target.getHealth());
+						MessageUtils.message(sender, "&6World: &e" + locationWorldName);
+						MessageUtils.message(sender,
+								"&6Coordinates: &eX: " + locationX + ", Y: " + locationY + ", Z: " + locationZ);
 						if (CommandSpy.CommandSpy == true) {
-							if (t.hasPermission("hs.commandspy")) {
-								if (data.getConfigurationSection("users." + targetId + ".cmdspy.toggle") != null) {
-									s.sendMessage(gold + "Command-Spy Enabled: " + ChatColor.GREEN + "TRUE");
-								}
-								if (data.getConfigurationSection("users." + targetId + ".cmdspy.toggle") == null) {
-									s.sendMessage(gold + "Command-Spy Enabled: " + ChatColor.RED + "FALSE");
-								}
-								if (data.getConfigurationSection("users." + targetId + ".cmdspy.bypass") != null) {
-									s.sendMessage(gold + "Command-Spy Bypass: " + ChatColor.GREEN + "TRUE");
-								}
-								if (data.getConfigurationSection("users." + targetId + ".cmdspy.bypass") == null) {
-									s.sendMessage(gold + "Command-Spy Bypass: " + ChatColor.RED + "FALSE");
-								}
+							String commandSpyToggle = data.getString("users." + targetId + ".cmdspy.toggle");
+							String commandSpyBypass = data.getString("users." + targetId + ".cmdspy.bypass");
+
+							if (target.hasPermission("hs.commandspy")) {
+								MessageUtils.message(sender, commandSpyToggle != null ? "&6Command-Spy Enabled: &aTrue"
+										: "&6Command-Spy Enabled: &cFalse");
+								MessageUtils.message(sender, commandSpyBypass != null ? "&6Command-Spy Bypass: &aTrue"
+										: "&6Command-Spy Bypass: &cFalse");
 							}
 						}
-						if (t.isOp()) {
-							s.sendMessage(gold + "Operator: " + ChatColor.GREEN + "TRUE");
-						}
-						if (!t.isOp()) {
-							s.sendMessage(gold + "Operator: " + ChatColor.RED + "FALSE");
-						}
+						MessageUtils.message(sender, target.isOp() ? "&6Operator: &aTrue" : "&6Operator: &cFalse");
 					}
-				} else if (args.length < 1) {
-					sender.sendMessage(MessageUtils.chat(config.getString("PlayerinfoCommand.not_enough_args_message")));
-				} else if (args.length > 1) {
-					sender.sendMessage(MessageUtils.chat(config.getString("PlayerinfoCommand.too_many_args_message")));
-				}
+				} else if (args.length < 1)
+					MessageUtils.configStringMessage(sender, "PlayerinfoCommand.not_enough_args_message");
+				else if (args.length > 1)
+					MessageUtils.configStringMessage(sender, "PlayerinfoCommand.too_many_args_message");
 			} else {
 				sender.sendMessage(MessageUtils.chat(config.getString("no_perm_message")));
 			}

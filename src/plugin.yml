@@ -42,3 +42,4 @@ commands:
   ping:
   i:
   sudo:
+  feed:

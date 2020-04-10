@@ -1,83 +1,72 @@
 package mc.rysty.heliosphereplugin.commands;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.chat.ChatCommands;
 import mc.rysty.heliosphereplugin.chat.CommandSpy;
+import mc.rysty.heliosphereplugin.utils.ListUtils;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
 import mc.rysty.heliosphereplugin.utils.VersionUtils;
 
 public class ServerInfo implements CommandExecutor {
-
-	HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
-	FileConfiguration config = plugin.getConfig();
 
 	public ServerInfo(HelioSpherePlugin plugin) {
 		plugin.getCommand("serverinfo").setExecutor(this);
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (cmd.getName().equalsIgnoreCase("serverinfo")) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (command.getName().equalsIgnoreCase("serverinfo")) {
 			if (sender.hasPermission("hs.serverinfo")) {
-				ChatColor gold = ChatColor.GOLD;
-				ChatColor yellow = ChatColor.YELLOW;
 				Server server = Bukkit.getServer();
-				String serverName = Bukkit.getName();
+				String serverName = server.getName();
 				String serverVersion = VersionUtils.getServerVersion();
-				String serverIp = server.getIp().toString();
 				int opSize = server.getOperators().size();
 				int banSize = server.getBannedPlayers().size();
-				PluginManager pm = server.getPluginManager();
-				int pluginsSize = pm.getPlugins().length;
+				PluginManager pluginManager = server.getPluginManager();
+				int pluginsSize = pluginManager.getPlugins().length;
 				OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
-				int onlinePlayers = server.getOnlinePlayers().size();
+				Collection<? extends Player> onlinePlayers = server.getOnlinePlayers();
+				int onlinePlayersSize = server.getOnlinePlayers().size();
 				int totalPlayers = offlinePlayers.length;
-				CommandSender s = sender;
 
-				s.sendMessage(ChatColor.DARK_AQUA + "==" + gold + "Server Information: " + yellow + serverName
-						+ ChatColor.DARK_AQUA + "==");
-				s.sendMessage(gold + "Online Players: " + yellow + onlinePlayers);
-				s.sendMessage(gold + "Total Players: " + yellow + totalPlayers);
-				s.sendMessage(gold + "IP: " + yellow + serverIp);
-				s.sendMessage(gold + "Plugins: " + yellow + pluginsSize);
-				s.sendMessage(gold + "Version: " + yellow + serverVersion);
-				s.sendMessage(gold + "Operators " + gold + "(" + yellow + opSize + gold + "): ");
-				for (OfflinePlayer ops : offlinePlayers) {
-					if (ops.isOp()) {
-						s.sendMessage(gold + "- " + yellow + ops.getName());
-					}
-				}
-				s.sendMessage(gold + "Ban List " + gold + "(" + yellow + banSize + gold + "): ");
-				for (OfflinePlayer bans : offlinePlayers) {
-					if (bans.isBanned()) {
-						s.sendMessage(gold + "- " + yellow + bans.getName());
-					}
-				}
-				if (!ChatCommands.muted) {
-					s.sendMessage(gold + "Chat Muted: " + ChatColor.RED + "FALSE");
-				}
-				if (ChatCommands.muted) {
-					s.sendMessage(gold + "Chat Muted: " + ChatColor.GREEN + "TRUE");
-				}
-				if (CommandSpy.CommandSpy) {
-					s.sendMessage(gold + "Command-Spy Enabled: " + ChatColor.GREEN + "TRUE");
-				}
-				if (!CommandSpy.CommandSpy) {
-					s.sendMessage(gold + "Command-Spy Enabled: " + ChatColor.RED + "FALSE");
-				}
-			} else {
-				sender.sendMessage(MessageUtils.chat(config.getString("no_perm_message")));
-			}
+				MessageUtils.message(sender, "&3==&6Server Information: &e" + serverName + "&3==");
+				MessageUtils.message(sender, "&6Online Players: &e" + onlinePlayersSize);
+				MessageUtils.message(sender, "&6Total Players: &e" + totalPlayers);
+				MessageUtils.message(sender, "&6Plugins: &e" + pluginsSize);
+				MessageUtils.message(sender, "&6Version: &e" + serverVersion);
+
+				List<String> operatorList = new ArrayList<>();
+				List<String> banList = new ArrayList<>();
+				for (Player onlinePlayer : onlinePlayers)
+					if (onlinePlayer.isOp())
+						operatorList.add(onlinePlayer.getName());
+				for (OfflinePlayer offlinePlayer : offlinePlayers)
+					if (offlinePlayer.isBanned())
+						banList.add(offlinePlayer.getName());
+
+				MessageUtils.message(sender,
+						"&6Operators (&e" + opSize + "&6): " + ListUtils.fromList(operatorList, false, false));
+				MessageUtils.message(sender,
+						"&6Ban List &6(&e" + banSize + "&6): " + ListUtils.fromList(banList, false, false));
+
+				MessageUtils.message(sender, (!ChatCommands.muted ? "&6Chat Muted: &cFalse" : "&6Chat Muted: &aTrue"));
+				MessageUtils.message(sender,
+						(CommandSpy.CommandSpy ? "&6Command-Spy Enabled: &aTrue" : "Command-Spy Enabled: &cFalse"));
+			} else
+				MessageUtils.configStringMessage(sender, "no_perm_message");
 		}
 		return false;
 	}

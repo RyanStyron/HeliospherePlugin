@@ -58,9 +58,9 @@ public class ServerInfo implements CommandExecutor {
 						banList.add(offlinePlayer.getName());
 
 				MessageUtils.message(sender,
-						"&6Operators (&e" + opSize + "&6): " + ListUtils.fromList(operatorList, false, false));
+						"&6Operators (&e" + opSize + "&6): &e" + ListUtils.fromList(operatorList, false, false));
 				MessageUtils.message(sender,
-						"&6Ban List &6(&e" + banSize + "&6): " + ListUtils.fromList(banList, false, false));
+						"&6Ban List &6(&e" + banSize + "&6): &e" + ListUtils.fromList(banList, false, false));
 
 				MessageUtils.message(sender, (!ChatCommands.muted ? "&6Chat Muted: &cFalse" : "&6Chat Muted: &aTrue"));
 				MessageUtils.message(sender,

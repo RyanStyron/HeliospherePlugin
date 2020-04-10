@@ -96,6 +96,10 @@ HealCommand:
   heal: '&6&l(!)&e You have been healed'
   heal_other: '&6&l(!)&e <target> has been healed'
 
+FeedCommand:
+  feed-message: "&6&l(!)&e <player>&e has been sated."
+  feed-player-message: "&6&l(!)&e You have been sated."
+
 SeeCommand:
   see_other_message: '&6&l(!)&e <toggle> the infinite vision of &e&l<target>'
   see_message: '&6&l(!)&e Your infinite vision has been &e&l<toggle>'

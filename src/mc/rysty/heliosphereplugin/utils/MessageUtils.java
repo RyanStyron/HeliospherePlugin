@@ -35,4 +35,8 @@ public class MessageUtils {
 	public static void consoleError() {
 		configStringMessage(Bukkit.getConsoleSender(), "console_error_message");
 	}
+
+	public static void validPlayerError(CommandSender sender) {
+		configStringMessage(sender, "player_offline_message");
+	}
 }

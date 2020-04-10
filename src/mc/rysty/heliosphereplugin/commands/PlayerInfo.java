@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.chat.CommandSpy;
 import mc.rysty.heliosphereplugin.utils.SettingsManager;
+import mc.rysty.heliosphereplugin.utils.VersionUtils;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
 
 public class PlayerInfo implements CommandExecutor {
@@ -43,9 +44,11 @@ public class PlayerInfo implements CommandExecutor {
 						double locationX = location.getBlockX();
 						double locationY = location.getBlockY();
 						double locationZ = location.getBlockZ();
+						String version = VersionUtils.getPlayerVersion(target);
 
 						MessageUtils.message(sender, "&3==&6Player Information: &e" + target.getName() + "&3==");
 						MessageUtils.message(sender, "&6Display Name: &e" + displayName);
+						MessageUtils.message(sender, "&6Version: &e" + version);
 						MessageUtils.message(sender, "&6UUID: &e" + targetId);
 						MessageUtils.message(sender, "&6IP Address: &e" + target.getAddress());
 						MessageUtils.message(sender, "&6Gamemode: &e" + target.getGameMode().toString());

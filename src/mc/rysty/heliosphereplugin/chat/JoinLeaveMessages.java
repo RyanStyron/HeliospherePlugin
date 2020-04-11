@@ -1,6 +1,5 @@
 package mc.rysty.heliosphereplugin.chat;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,32 +11,40 @@ import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
 
 public class JoinLeaveMessages implements Listener {
-	
-	HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
-	FileConfiguration config = plugin.getConfig();
-	
-	@EventHandler
-	public void onJoin(PlayerJoinEvent e) {
-		if (e.getJoinMessage().contains("joined the game")) {
-			e.setJoinMessage(null);
-		}
-		Player p = e.getPlayer();
-		String dName = p.getDisplayName();
-		
-		if (!p.hasPlayedBefore()) {
-			Bukkit.broadcastMessage(MessageUtils.chat(config.getString("firstJoin_message").replace("<player>", dName).replaceAll("<server>", plugin.getServer().getName())));
-		} else {
-			Bukkit.broadcastMessage(MessageUtils.chat(config.getString("join_message").replace("<player>", dName)));
-		}
+
+	private HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
+	private FileConfiguration config = plugin.getConfig();
+
+	public JoinLeaveMessages(HelioSpherePlugin plugin) {
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
+
 	@EventHandler
-	public void onLeave(PlayerQuitEvent e) {
-		if (e.getQuitMessage().contains("left the game")) {
-			e.setQuitMessage(null);
-		}
-		Player p = e.getPlayer();
-		String dName = p.getDisplayName();
-		
-		Bukkit.broadcastMessage(MessageUtils.chat(config.getString("leave_message").replace("<player>", dName)));
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		if (event.getJoinMessage().contains("joined the game"))
+			event.setJoinMessage(null);
+
+		Player player = event.getPlayer();
+		String displayName = player.getDisplayName();
+		String firstJoinMessage = config.getString("firstJoin_message").replace("<player>", displayName)
+				.replaceAll("<server>", plugin.getServer().getName());
+		String joinMessage = config.getString("join_message").replace("<player>", displayName);
+
+		if (!player.hasPlayedBefore())
+			MessageUtils.broadcastMessage(firstJoinMessage, null);
+		else
+			MessageUtils.broadcastMessage(joinMessage, null);
+	}
+
+	@EventHandler
+	public void onPlayerLeave(PlayerQuitEvent event) {
+		if (event.getQuitMessage().contains("left the game"))
+			event.setQuitMessage(null);
+
+		Player player = event.getPlayer();
+		String displayName = player.getDisplayName();
+		String message = config.getString("leave_message").replace("<player>", displayName);
+
+		MessageUtils.broadcastMessage(message, null);
 	}
 }

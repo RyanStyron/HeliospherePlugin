@@ -75,8 +75,8 @@ public class HelioSpherePlugin extends JavaPlugin {
 		new Sudo(this);
 		new CommandFeed(this);
 
+		new JoinLeaveMessages(this);
 		pluginManager.registerEvents(new UpdateDataYaml(), this);
-		pluginManager.registerEvents(new JoinLeaveMessages(), this);
 		pluginManager.registerEvents(new CommandSpy(), this);
 		pluginManager.registerEvents(new CustomChatFormat(), this);
 

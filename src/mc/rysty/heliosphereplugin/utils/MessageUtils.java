@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 
@@ -17,6 +18,12 @@ public class MessageUtils {
 
 	public static void message(CommandSender sender, String message) {
 		sender.sendMessage(chat(message));
+	}
+
+	public static void broadcastMessage(String message, String permission) {
+		for (Player onlinePlayer : Bukkit.getOnlinePlayers())
+			if (onlinePlayer.hasPermission(permission) || permission == null)
+				message(onlinePlayer, message);
 	}
 
 	public static void configStringMessage(CommandSender sender, String configString) {

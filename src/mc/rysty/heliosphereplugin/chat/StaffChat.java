@@ -2,11 +2,9 @@ package mc.rysty.heliosphereplugin.chat;
 
 import java.util.UUID;
 
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,17 +17,14 @@ import mc.rysty.heliosphereplugin.utils.MessageUtils;
 
 public class StaffChat implements CommandExecutor, Listener {
 
-	HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
-	FileConfiguration config = plugin.getConfig();
-	SettingsManager settings = SettingsManager.getInstance();
-	FileConfiguration data = settings.getData();
+	private FileConfiguration config = HelioSpherePlugin.getInstance().getConfig();
+	private SettingsManager settings = SettingsManager.getInstance();
+	private FileConfiguration data = settings.getData();
 
 	public StaffChat(HelioSpherePlugin plugin) {
 		plugin.getCommand("staffchat").setExecutor(this);
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
-
-	private Server server = plugin.getServer();
-	private CommandSender console = server.getConsoleSender();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -38,33 +33,24 @@ public class StaffChat implements CommandExecutor, Listener {
 				if (sender.hasPermission("hs.staffchat")) {
 					Player player = (Player) sender;
 					UUID playerId = player.getUniqueId();
-					String scDisabled = MessageUtils.chat(config.getString("StaffChat.sc_disabled"));
-					String scEnabled = MessageUtils.chat(config.getString("StaffChat.sc_enabled"));
-					ConfigurationSection staffChatConfigurationSection = data
-							.getConfigurationSection("users." + playerId + ".staffchat");
+					String staffChatConfigString = data.getString("users." + playerId + ".staffchat");
 
 					if (args.length == 0) {
-						if (staffChatConfigurationSection != null) {
-							data.set(("users." + playerId + ".staffchat"), null);
-							settings.saveData();
-							player.sendMessage(scDisabled);
-							return true;
-						} else if (staffChatConfigurationSection == null) {
+						if (staffChatConfigString != null) {
+							data.set("users." + playerId + ".staffchat", null);
+							MessageUtils.configStringMessage(sender, "StaffChat.sc_enabled");
+						} else {
 							data.set("users." + playerId + ".staffchat.enabled", true);
-							settings.saveData();
-							player.sendMessage(scEnabled);
-							return true;
+							MessageUtils.configStringMessage(sender, "StaffChat.sc_disabled");
 						}
+						settings.saveData();
 					} else if (args.length >= 1) {
-						player.sendMessage(MessageUtils.chat(config.getString("StaffChat.arg_error")));
-						return true;
+						MessageUtils.configStringMessage(sender, "StaffChat.arg_error");
 					}
-				} else {
-					sender.sendMessage(MessageUtils.chat(config.getString("no_perm_message")));
-				}
-			} else {
-				sender.sendMessage(MessageUtils.chat(config.getString("console_error_message")));
-			}
+				} else
+					MessageUtils.noPermissionError(sender);
+			} else
+				MessageUtils.consoleError();
 		}
 		return false;
 	}
@@ -72,22 +58,15 @@ public class StaffChat implements CommandExecutor, Listener {
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
-		String m = event.getMessage();
+		String message = event.getMessage();
 		UUID playerId = player.getUniqueId();
-		String dName = player.getDisplayName();
-		String scMessage = MessageUtils.chat(config.getString("StaffChat.sc_message"));
+		String displayName = player.getDisplayName();
 
-		if (data.getConfigurationSection("users." + playerId + ".staffchat") != null) {
+		if (data.getString("users." + playerId + ".staffchat") != null) {
 			if (player.hasPermission("hs.staffchat")) {
 				event.setCancelled(true);
-				for (Player s : server.getOnlinePlayers()) {
-					if (s.hasPermission("hs.sc.see")) {
-						s.sendMessage(scMessage.replaceAll("<msg>", MessageUtils.chat(m)).replaceAll("<player>",
-								MessageUtils.chat(dName)));
-					}
-				}
-				console.sendMessage(scMessage.replaceAll("<msg>", MessageUtils.chat(m)).replaceAll("<player>",
-						MessageUtils.chat(dName)));
+				MessageUtils.broadcastMessage(config.getString("StaffChat.sc_message").replaceAll("<msg>", message)
+						.replaceAll("<player>", displayName), "hs.staffchat");
 			} else {
 				data.set("users." + playerId + ".staffchat", null);
 				settings.saveData();

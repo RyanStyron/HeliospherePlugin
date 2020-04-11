@@ -42,20 +42,21 @@ public class Fly implements CommandExecutor {
 
 					if (dataFileFlyString == null) {
 						dataFile.set("users." + targetId + ".fly", true);
+						target.setAllowFlight(true);
 						target.setFlying(true);
 					} else {
 						dataFile.set("users." + targetId + ".fly", null);
+						target.setAllowFlight(false);
 						target.setFlying(false);
 					}
 					dataFileManager.saveData();
 
 					MessageUtils.configStringMessage(sender,
-							dataFileFlyString == null ? "FlyCommand.fly-disabled-message"
-									: "FlyCommand.fly-enabled-message",
+							!target.isFlying() ? "FlyCommand.fly-disabled-message" : "FlyCommand.fly-enabled-message",
 							"<player>", displayName);
 					if (target != sender)
-						MessageUtils.configStringMessage(sender,
-								dataFileFlyString == null ? "FlyCommand.fly-disabled-player-message"
+						MessageUtils.configStringMessage(target,
+								!target.isFlying() ? "FlyCommand.fly-disabled-player-message"
 										: "FlyCommand.fly-enabled-player-message");
 				}
 			} else

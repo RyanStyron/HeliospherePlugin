@@ -11,6 +11,7 @@ import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 public class MessageUtils {
 
 	private static FileConfiguration config = HelioSpherePlugin.getInstance().getConfig();
+	private static CommandSender console = Bukkit.getConsoleSender();
 
 	public static String chat(String string) {
 		return ChatColor.translateAlternateColorCodes('&', string);
@@ -24,6 +25,7 @@ public class MessageUtils {
 		for (Player onlinePlayer : Bukkit.getOnlinePlayers())
 			if (onlinePlayer.hasPermission(permission) || permission == null)
 				message(onlinePlayer, message);
+		message(console, message);
 	}
 
 	public static void configStringMessage(CommandSender sender, String configString) {
@@ -40,7 +42,7 @@ public class MessageUtils {
 	}
 
 	public static void consoleError() {
-		configStringMessage(Bukkit.getConsoleSender(), "console_error_message");
+		configStringMessage(console, "console_error_message");
 	}
 
 	public static void validPlayerError(CommandSender sender) {

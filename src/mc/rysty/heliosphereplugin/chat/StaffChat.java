@@ -38,10 +38,10 @@ public class StaffChat implements CommandExecutor, Listener {
 					if (args.length == 0) {
 						if (staffChatConfigString != null) {
 							data.set("users." + playerId + ".staffchat", null);
-							MessageUtils.configStringMessage(sender, "StaffChat.sc_enabled");
+							MessageUtils.configStringMessage(sender, "StaffChat.sc_disabled");
 						} else {
 							data.set("users." + playerId + ".staffchat.enabled", true);
-							MessageUtils.configStringMessage(sender, "StaffChat.sc_disabled");
+							MessageUtils.configStringMessage(sender, "StaffChat.sc_enabled");
 						}
 						settings.saveData();
 					} else if (args.length >= 1) {

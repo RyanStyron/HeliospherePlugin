@@ -1,5 +1,7 @@
 package mc.rysty.heliosphereplugin.commands;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,11 +11,12 @@ import org.bukkit.entity.Player;
 
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
+import mc.rysty.heliosphereplugin.utils.SettingsManager;
 
 public class Fly implements CommandExecutor {
 
-	private HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
-	private FileConfiguration config = plugin.getConfig();
+	private SettingsManager dataFileManager = SettingsManager.getInstance();
+	private FileConfiguration dataFile = dataFileManager.getData();
 
 	public Fly(HelioSpherePlugin plugin) {
 		plugin.getCommand("fly").setExecutor(this);
@@ -25,52 +28,35 @@ public class Fly implements CommandExecutor {
 			if (sender.hasPermission("hs.fly")) {
 				Player target = null;
 
-				if (args.length == 0) {
-					if (!(sender instanceof Player)) {
-						sender.sendMessage(MessageUtils.chat(config.getString("console_player_error_message")));
-						return true;
-					}
+				if (args.length > 0)
+					target = Bukkit.getPlayer(args[0]);
+				else if (sender instanceof Player)
 					target = (Player) sender;
 
-					if (target.isFlying()) {
-						target.setAllowFlight(false);
-						target.setFlying(false);
-						target.sendMessage(MessageUtils.chat(config.getString("FlyCommand.flying_disabled")));
-						return true;
-					} else {
-						target.setAllowFlight(true);
-						target.setFlying(true);
-						target.sendMessage(MessageUtils.chat(config.getString("FlyCommand.flying_enabled")));
-					}
-				} else if (args.length == 1) {
-					if (sender.hasPermission("hs.fly.other")) {
-						target = Bukkit.getPlayer(args[0]);
+				if (target == null)
+					MessageUtils.validPlayerError(sender);
+				else {
+					String displayName = target.getDisplayName();
+					UUID targetId = target.getUniqueId();
+					String dataFileFlyString = dataFile.getString("users." + targetId + ".fly");
 
-						if (target == null)
-							sender.sendMessage(MessageUtils.chat(config.getString("player_offline_message")));
-						else if (target != null)
-							if (target.isFlying()) {
-								target.setAllowFlight(false);
-								target.setFlying(false);
-								target.sendMessage(MessageUtils.chat(config.getString("FlyCommand.flying_disabled")));
-								sender.sendMessage(
-										MessageUtils.chat(config.getString("FlyCommand.flying_target_disabled")
-												.replaceAll("<target>", target.getDisplayName())));
-								return true;
-							} else {
-								target.setAllowFlight(true);
-								target.setFlying(true);
-								target.sendMessage(MessageUtils.chat(config.getString("FlyCommand.flying_enabled")));
-								sender.sendMessage(
-										MessageUtils.chat(config.getString("FlyCommand.flying_target_enabled")
-												.replaceAll("<target>", target.getDisplayName())));
-							}
+					if (dataFileFlyString == null) {
+						dataFile.set("users." + targetId + ".fly", true);
+						target.setFlying(true);
 					} else {
-						sender.sendMessage(MessageUtils.chat(config.getString("FlyCommand.no_perm_message")));
+						dataFile.set("users." + targetId + ".fly", null);
+						target.setFlying(false);
 					}
-				} else if (args.length > 1) {
-					sender.sendMessage(MessageUtils.chat(config.getString("too_many_args_error")));
-					return false;
+					dataFileManager.saveData();
+
+					MessageUtils.configStringMessage(sender,
+							dataFileFlyString == null ? "FlyCommand.fly-disabled-message"
+									: "FlyCommand.fly-enabled-message",
+							"<player>", displayName);
+					if (target != sender)
+						MessageUtils.configStringMessage(sender,
+								dataFileFlyString == null ? "FlyCommand.fly-disabled-player-message"
+										: "FlyCommand.fly-enabled-player-message");
 				}
 			} else
 				MessageUtils.noPermissionError(sender);

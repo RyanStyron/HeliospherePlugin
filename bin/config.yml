@@ -35,11 +35,10 @@ CommandSpy:
   cmdspy_global_disabled: "&6&l(!)&e &7Command Spy has been disabled."
 
 FlyCommand:
-  flying_enabled: "&6&l(!)&e You can now fly."
-  flying_disabled: "&6&l(!)&e You can no longer fly."
-  flying_target_enabled: "&6&l(!)&e You have enabled flight for &e&l<target>&e."
-  flying_target_disabled: "&6&l(!)&e You have disabled flight for &e&l<target>&e."
-  no_perm_message: "&c&l(!)&e You do not have permission to do this."
+  fly-enabled-message: "&6&l(!)&e <player>&e can now fly."
+  fly-disabled-message: "&6&l(!)&e <player>&e can no longer fly."
+  fly-enabled-player-message: "&6&l(!)&e You can now fly."
+  fly-disabled-player-message: "&6&l(!)&e You can no longer fly."
   
 ChatCommand:
   chat_help: "&c&l(!)&e Invalid argument. Accepted arguments: clear, toggle."

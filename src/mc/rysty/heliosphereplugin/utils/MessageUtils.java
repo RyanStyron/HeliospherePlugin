@@ -23,7 +23,9 @@ public class MessageUtils {
 
 	public static void broadcastMessage(String message, String permission) {
 		for (Player onlinePlayer : Bukkit.getOnlinePlayers())
-			if (onlinePlayer.hasPermission(permission) || permission == null)
+			if (permission == null)
+				message(onlinePlayer, message);
+			else if (onlinePlayer.hasPermission(permission))
 				message(onlinePlayer, message);
 		message(console, message);
 	}

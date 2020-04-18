@@ -52,6 +52,7 @@ public class PlayerInfo implements CommandExecutor {
 						MessageUtils.message(sender, "&6UUID: &e" + targetId);
 						MessageUtils.message(sender, "&6IP Address: &e" + target.getAddress());
 						MessageUtils.message(sender, "&6Gamemode: &e" + target.getGameMode().toString());
+						MessageUtils.message(sender, "&6Flying: " + (target.getAllowFlight() ? "&aTrue" : "&cFalse"));
 						MessageUtils.message(sender, "&6Health: &e" + target.getHealth());
 						MessageUtils.message(sender, "&6World: &e" + locationWorldName);
 						MessageUtils.message(sender,

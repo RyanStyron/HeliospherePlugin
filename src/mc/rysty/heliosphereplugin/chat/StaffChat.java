@@ -68,14 +68,16 @@ public class StaffChat implements CommandExecutor, Listener {
 			event.setCancelled(true);
 			MessageUtils.broadcastMessage(config.getString("StaffChat.sc_message").replaceAll("<msg>", message)
 					.replaceAll("<player>", displayName), "hs.staffchat");
-		} else if (data.getString("users." + playerId + ".staffchat") != null) {
-			if (player.hasPermission("hs.staffchat")) {
-				event.setCancelled(true);
-				MessageUtils.broadcastMessage(config.getString("StaffChat.sc_message").replaceAll("<msg>", message)
-						.replaceAll("<player>", displayName), "hs.staffchat");
-			} else {
-				data.set("users." + playerId + ".staffchat", null);
-				settings.saveData();
+		} else if (!message.startsWith("@ac")) {
+			if (data.getString("users." + playerId + ".staffchat") != null) {
+				if (player.hasPermission("hs.staffchat")) {
+					event.setCancelled(true);
+					MessageUtils.broadcastMessage(config.getString("StaffChat.sc_message").replaceAll("<msg>", message)
+							.replaceAll("<player>", displayName), "hs.staffchat");
+				} else {
+					data.set("users." + playerId + ".staffchat", null);
+					settings.saveData();
+				}
 			}
 		}
 	}

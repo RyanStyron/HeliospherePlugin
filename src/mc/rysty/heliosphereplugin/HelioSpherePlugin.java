@@ -5,6 +5,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import mc.rysty.heliosphereplugin.chat.AFK;
+import mc.rysty.heliosphereplugin.chat.AdminChat;
 import mc.rysty.heliosphereplugin.chat.Broadcast;
 import mc.rysty.heliosphereplugin.chat.ChatCommands;
 import mc.rysty.heliosphereplugin.chat.CommandSpy;
@@ -83,6 +84,7 @@ public class HelioSpherePlugin extends JavaPlugin {
 		new ChatCommands(this);
 		new AFK(this);
 		new StaffChat(this);
+		new AdminChat(this);
 		new ToggleBlockModify(this);
 		new Vanish(this);
 		pluginManager.registerEvents(new ChatCommands(this), this);

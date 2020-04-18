@@ -39,7 +39,7 @@ public class ServerInfo implements CommandExecutor {
 				int pluginsSize = pluginManager.getPlugins().length;
 				OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
 				Collection<? extends Player> onlinePlayers = server.getOnlinePlayers();
-				int onlinePlayersSize = server.getOnlinePlayers().size();
+				int onlinePlayersSize = onlinePlayers.size();
 				int totalPlayers = offlinePlayers.length;
 
 				MessageUtils.message(sender, "&3==&6Server Information: &e" + serverName + "&3==");
@@ -50,12 +50,12 @@ public class ServerInfo implements CommandExecutor {
 
 				List<String> operatorList = new ArrayList<>();
 				List<String> banList = new ArrayList<>();
-				for (Player onlinePlayer : onlinePlayers)
-					if (onlinePlayer.isOp())
-						operatorList.add(onlinePlayer.getName());
-				for (OfflinePlayer offlinePlayer : offlinePlayers)
+				for (OfflinePlayer offlinePlayer : offlinePlayers) {
+					if (offlinePlayer.isOp())
+						operatorList.add(offlinePlayer.getName());
 					if (offlinePlayer.isBanned())
 						banList.add(offlinePlayer.getName());
+				}
 
 				MessageUtils.message(sender,
 						"&6Operators (&e" + opSize + "&6): &e" + ListUtils.fromList(operatorList, false, false));

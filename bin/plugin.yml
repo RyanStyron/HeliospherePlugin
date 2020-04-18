@@ -43,3 +43,5 @@ commands:
   i:
   sudo:
   feed:
+  versionlist:
+    aliases: [verlist]

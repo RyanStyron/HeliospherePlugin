@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class MessageUtils {
 
@@ -19,6 +20,10 @@ public class MessageUtils {
 
 	public static void message(CommandSender sender, String message) {
 		sender.sendMessage(chat(message));
+	}
+
+	public static void message(CommandSender sender, BaseComponent[] baseComponent) {
+		sender.spigot().sendMessage(baseComponent);
 	}
 
 	public static void broadcastMessage(String message, String permission) {

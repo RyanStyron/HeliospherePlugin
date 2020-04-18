@@ -2,7 +2,7 @@ console_error_message: "&c&l(!)&e This command can only be executed by a player.
 player_offline_message: "&4&l(!)&c A valid player must be specified."
 console_player_error_message: "&c&l(!)&e An online player must be specified."
 no_perm_message: "&c&l(!)&e You do not have permission to do this."
-too_many_args_error: "&c&l(!)&e Too many arguments were provided."
+too_many_args_error: "&4&l(!)&c Too many arguments were provided."
 not_enough_args_error: "&c&l(!)&e Not enough arguments were provided."
 
 # Join/Leave Event Messages

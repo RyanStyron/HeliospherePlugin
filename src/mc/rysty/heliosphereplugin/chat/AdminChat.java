@@ -27,10 +27,8 @@ public class AdminChat implements Listener {
             message = message.replace("@ac", "");
 
             event.setCancelled(true);
-            MessageUtils.broadcastMessage(
-                    config.getString("StaffChat.sc_message").replaceAll("&5&l[&d&lSC&5&l]", "&4&l[&c&lAC&]")
-                            .replaceAll("<msg>", message).replaceAll("<player>", displayName),
-                    "hs.adminchat");
+            MessageUtils.broadcastMessage(config.getString("StaffChat.admin-chat-message").replaceAll("<msg>", message)
+                    .replaceAll("<player>", displayName), "hs.adminchat");
         }
     }
 }

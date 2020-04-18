@@ -90,7 +90,8 @@ StaffChat:
   sc_enabled: "&6&l(!)&e You have enabled Staff-Chat."
   sc_disabled: '&6&l(!)&e You have disabled Staff-Chat.'
   arg_error: '&4&l(!)&c Too many arguments were provided. Usage: /sc'
-  
+  admin-chat-message: "&4&l[&c&lAC&4&l]&7 <player>&7:&f <msg>"
+
 HealCommand:
   heal: '&6&l(!)&e You have been healed'
   heal_other: '&6&l(!)&e <target> has been healed'

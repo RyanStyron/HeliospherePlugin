@@ -55,14 +55,15 @@ ClearCommand:
   clear_error: "&4&l(!)&c There were no items in the inventory of <player>&c to clear."
 
 InvSeeCommand:
-  inv_opened_message: "&6&l(!)&e Successfully accessed the inventory of &e&l<player>&e."
-  argument_error: "&4&l(!)&c Not enough arguments were provided. Correct format: /invsee <player>"
+  argument-error: "&4&l(!)&c A valid amount of arguments must be provided. Usage: /invsee <player>"
+  invsee-message: "&4&l(!)&c Opening your inventory..."
+  invsee-other-message: "&6&l(!)&e Opening the inventory of &e&l<player>&e..."
 
 EnderchestCommand:
   argument-error: "&4&l(!)&c A valid amount of arguments must be provided. Usage: /enderchest <player>"
   permission-error: "&4&l(!)&c You do not have permission to access the enderchests of other players!"
   enderchest-message: "&6&l(!)&e Opening your enderchest..."
-  enderchest-other-message: "&6&l(!)&e Opening the enderchest of <player>&e..."
+  enderchest-other-message: "&6&l(!)&e Opening the enderchest of &e&l<player>&e..."
 
 InvincibleCommand:
   invc_enabled: "&6&l(!)&e You are now invulnerable."

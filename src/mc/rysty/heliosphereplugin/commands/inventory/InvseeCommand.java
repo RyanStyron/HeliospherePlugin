@@ -5,15 +5,20 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
 
-public class InvseeCommand implements CommandExecutor {
+public class InvseeCommand implements CommandExecutor, Listener {
 
 	public InvseeCommand(HelioSpherePlugin plugin) {
 		plugin.getCommand("invsee").setExecutor(this);
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	@Override
@@ -34,14 +39,10 @@ public class InvseeCommand implements CommandExecutor {
 							MessageUtils.validPlayerError(sender);
 						else {
 							Inventory targetInventory;
-							targetInventory = Bukkit.createInventory(target, 45, target.getName() + "'s Inventory");
+							targetInventory = Bukkit.createInventory(player, 45, target.getName() + "'s Inventory");
 							targetInventory.setContents(target.getInventory().getContents());
-							targetInventory.setContents(target.getInventory().getArmorContents());
 
-							if (target.hasPermission("hs.admin") && !player.hasPermission("hs.admin")) {
-								player.openInventory(targetInventory);
-							} else
-								player.openInventory(targetInventory);
+							player.openInventory(targetInventory);
 
 							if (target != player)
 								MessageUtils.configStringMessage(sender, "InvSeeCommand.invsee-other-message",
@@ -57,5 +58,28 @@ public class InvseeCommand implements CommandExecutor {
 				MessageUtils.noPermissionError(sender);
 		}
 		return false;
+	}
+
+	@EventHandler
+	public void onInventoryClick(InventoryClickEvent event) {
+		if (event.getInventory() == null)
+			return;
+		Inventory inventory = event.getInventory();
+		
+		if (event.getView() == null)
+			return;
+		InventoryView view = event.getView();
+		
+		if (view.getTitle() == null)
+			return;
+		String title = view.getTitle();
+
+		if (title.contains("'s Inventory")) {
+			String targetNameString = title.replace("'s Inventory", "");
+			Player target = Bukkit.getPlayer(targetNameString);
+
+			target.getInventory().setContents(inventory.getContents());
+			target.updateInventory();
+		}
 	}
 }

@@ -56,7 +56,7 @@ ClearCommand:
 
 InvSeeCommand:
   argument-error: "&4&l(!)&c A valid amount of arguments must be provided. Usage: /invsee <player>"
-  invsee-message: "&4&l(!)&c Opening your inventory..."
+  invsee-message: "&6&l(!)&e Opening your inventory..."
   invsee-other-message: "&6&l(!)&e Opening the inventory of &e&l<player>&e..."
 
 EnderchestCommand:

@@ -3,6 +3,7 @@ package mc.rysty.heliosphereplugin.chat;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,8 +18,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
-import mc.rysty.heliosphereplugin.utils.SettingsManager;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
+import mc.rysty.heliosphereplugin.utils.SettingsManager;
 
 public class AFK implements CommandExecutor, Listener {
 
@@ -76,11 +77,15 @@ public class AFK implements CommandExecutor, Listener {
 		Player player = event.getPlayer();
 		UUID playerId = player.getUniqueId();
 		String displayName = player.getDisplayName();
+		Location toLocation = event.getTo();
+		Location fromLocation = event.getFrom();
 
-		if (data.getString("users." + playerId + ".afk") != null) {
-			data.set("users." + playerId + ".afk", null);
-			settings.saveData();
-			server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", displayName));
+		if (toLocation.distanceSquared(fromLocation) >= 3) {
+			if (data.getString("users." + playerId + ".afk") != null) {
+				data.set("users." + playerId + ".afk", null);
+				settings.saveData();
+				server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", displayName));
+			}
 		}
 	}
 

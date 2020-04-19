@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.HoverEvent;
 
 public class MessageUtils {
 
@@ -42,6 +43,20 @@ public class MessageUtils {
 	public static void configStringMessage(CommandSender sender, String configString, String regex,
 			String replacement) {
 		message(sender, config.getString(configString).replaceAll(regex, replacement));
+	}
+
+	public static void exceptionError(CommandSender sender, Exception exception) {
+		String stacktrace = "&6" + exception.getClass().getName();
+
+		for (StackTraceElement element : exception.getStackTrace())
+			stacktrace += "\n&6at &7" + element.getClassName() + ": &6"
+					+ String.valueOf(element.getLineNumber()).replace("-1", "Unknown source");
+
+		MessageBuilder builder = new MessageBuilder();
+		builder.append("&4&l(!)&c An error occurred... hover for more info").hoverEvent(HoverEvent.Action.SHOW_TEXT,
+				stacktrace);
+
+		message(sender, builder.build());
 	}
 
 	public static void noPermissionError(CommandSender sender) {

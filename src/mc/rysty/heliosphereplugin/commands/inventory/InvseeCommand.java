@@ -77,7 +77,6 @@ public class InvseeCommand implements CommandExecutor, Listener {
 		if (title.contains("'s Inventory")) {
 			String targetNameString = title.replace("'s Inventory", "");
 			Player target = Bukkit.getPlayer(targetNameString);
-			Player player = (Player) event.getWhoClicked();
 
 			target.getInventory().setContents(inventory.getContents());
 			target.updateInventory();

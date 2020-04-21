@@ -39,8 +39,8 @@ public class InvseeCommand implements CommandExecutor, Listener {
 							MessageUtils.validPlayerError(sender);
 						else {
 							Inventory targetInventory;
-							targetInventory = Bukkit.createInventory(player, 45, target.getName() + "'s Inventory");
-							targetInventory.setContents(target.getInventory().getContents());
+							targetInventory = Bukkit.createInventory(player, 36, target.getName() + "'s Inventory");
+							targetInventory.setContents(target.getInventory().getStorageContents());
 
 							player.openInventory(targetInventory);
 
@@ -65,11 +65,11 @@ public class InvseeCommand implements CommandExecutor, Listener {
 		if (event.getInventory() == null)
 			return;
 		Inventory inventory = event.getInventory();
-		
+
 		if (event.getView() == null)
 			return;
 		InventoryView view = event.getView();
-		
+
 		if (view.getTitle() == null)
 			return;
 		String title = view.getTitle();
@@ -77,6 +77,7 @@ public class InvseeCommand implements CommandExecutor, Listener {
 		if (title.contains("'s Inventory")) {
 			String targetNameString = title.replace("'s Inventory", "");
 			Player target = Bukkit.getPlayer(targetNameString);
+			Player player = (Player) event.getWhoClicked();
 
 			target.getInventory().setContents(inventory.getContents());
 			target.updateInventory();

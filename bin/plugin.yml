@@ -45,3 +45,5 @@ commands:
   feed:
   versionlist:
     aliases: [verlist]
+  mute:   
+ 

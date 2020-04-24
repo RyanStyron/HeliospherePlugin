@@ -62,7 +62,7 @@ public class ServerInfo implements CommandExecutor {
 				MessageUtils.message(sender,
 						"&6Ban List &6(&e" + banSize + "&6): &e" + ListUtils.fromList(banList, false, false));
 
-				MessageUtils.message(sender, "Whitelist Enabled: " + (server.hasWhitelist() ? "&aTrue" : "&cFalse"));
+				MessageUtils.message(sender, "&6Whitelist Enabled: " + (server.hasWhitelist() ? "&aTrue" : "&cFalse"));
 				MessageUtils.message(sender, (!ChatCommands.muted ? "&6Chat Muted: &cFalse" : "&6Chat Muted: &aTrue"));
 				MessageUtils.message(sender,
 						(CommandSpy.CommandSpy ? "&6Command-Spy Enabled: &aTrue" : "Command-Spy Enabled: &cFalse"));

@@ -45,6 +45,11 @@ public class MessageUtils {
 		message(sender, config.getString(configString).replaceAll(regex, replacement));
 	}
 
+	public static void configStringMessage(CommandSender sender, String configString, String regex, String replacement,
+			String regex2, String replacement2) {
+		message(sender, config.getString(configString).replaceAll(regex, replacement).replaceAll(regex2, replacement2));
+	}
+
 	public static void exceptionError(CommandSender sender, Exception exception) {
 		String stacktrace = "&6" + exception.getClass().getName();
 
@@ -61,6 +66,10 @@ public class MessageUtils {
 
 	public static void noPermissionError(CommandSender sender) {
 		configStringMessage(sender, "no_perm_message");
+	}
+
+	public static void argumentError(CommandSender sender, String usage) {
+		configStringMessage(sender, "argument-error", "<usage>", usage);
 	}
 
 	public static void consoleError() {

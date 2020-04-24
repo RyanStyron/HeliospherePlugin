@@ -8,6 +8,7 @@ import mc.rysty.heliosphereplugin.chat.AFK;
 import mc.rysty.heliosphereplugin.chat.AdminChat;
 import mc.rysty.heliosphereplugin.chat.Broadcast;
 import mc.rysty.heliosphereplugin.chat.ChatCommands;
+import mc.rysty.heliosphereplugin.chat.CommandMute;
 import mc.rysty.heliosphereplugin.chat.CommandSpy;
 import mc.rysty.heliosphereplugin.chat.CommandSpyCommands;
 import mc.rysty.heliosphereplugin.chat.CustomChatFormat;
@@ -82,6 +83,7 @@ public class HelioSpherePlugin extends JavaPlugin {
 		pluginManager.registerEvents(new UpdateDataYaml(), this);
 		pluginManager.registerEvents(new CommandSpy(), this);
 		pluginManager.registerEvents(new CustomChatFormat(), this);
+		new CommandMute(this);
 
 		new ChatCommands(this);
 		new AFK(this);

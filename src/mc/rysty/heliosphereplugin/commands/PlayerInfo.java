@@ -57,6 +57,8 @@ public class PlayerInfo implements CommandExecutor {
 						MessageUtils.message(sender, "&6World: &e" + locationWorldName);
 						MessageUtils.message(sender,
 								"&6Coordinates: &eX: " + locationX + ", Y: " + locationY + ", Z: " + locationZ);
+						MessageUtils.message(sender, "&6Muted: "
+								+ (data.getString("users." + targetId + ".muted") != null ? "&aTrue" : "&cFalse"));
 						if (CommandSpy.CommandSpy == true) {
 							String commandSpyToggle = data.getString("users." + targetId + ".cmdspy.toggle");
 							String commandSpyBypass = data.getString("users." + targetId + ".cmdspy.bypass");

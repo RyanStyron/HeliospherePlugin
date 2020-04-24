@@ -4,6 +4,7 @@ console_player_error_message: "&c&l(!)&e An online player must be specified."
 no_perm_message: "&c&l(!)&e You do not have permission to do this."
 too_many_args_error: "&4&l(!)&c Too many arguments were provided."
 not_enough_args_error: "&c&l(!)&e Not enough arguments were provided."
+argument-error: "&4&l(!)&c A valid amount of arguments must be provided. Usage: <usage>"
 
 # Join/Leave Event Messages
 firstJoin_message: "&3&l(!)&b&l <player>&b joined the server for the first time!"
@@ -127,4 +128,9 @@ PingCommand:
 Sudo:
   argument-error: "&4&l(!)&c A valid amount of arguments must be provded! Usage: /sudo <player> <command/message>"
   sudo-message: "&6&l(!)&e <player>&e has been sudoed."
+
+CommandMute:
+  chat-error: "&4&l(!)&c You can not send messages when you are muted!"
+  mute-message: "&6&l(!)&e <player>&e is <muted> muted"
+  mute-message-target: "&6&l(!)&e You are <muted> muted."
   

@@ -1,26 +1,30 @@
 package mc.rysty.heliosphereplugin.chat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
-import mc.rysty.heliosphereplugin.utils.SettingsManager;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
+import mc.rysty.heliosphereplugin.utils.SettingsManager;
 
-public class CommandSpyCommands implements CommandExecutor {
+public class CommandSpyCommands implements CommandExecutor, TabCompleter {
 
-	HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
-	SettingsManager settings = SettingsManager.getInstance();
-	FileConfiguration data = settings.getData();
-	FileConfiguration config = plugin.getConfig();
+	private HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
+	private SettingsManager settings = SettingsManager.getInstance();
+	private FileConfiguration data = settings.getData();
+	private FileConfiguration config = plugin.getConfig();
 
 	public CommandSpyCommands(HelioSpherePlugin plugin) {
 		plugin.getCommand("commandspy").setExecutor(this);
+		plugin.getCommand("commandspy").setTabCompleter(this);
 	}
 
 	@Override
@@ -118,4 +122,18 @@ public class CommandSpyCommands implements CommandExecutor {
 		return false;
 	}
 
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		if (args.length == 1) {
+			List<String> completions = new ArrayList<>();
+
+			completions.add("toggle");
+			completions.add("bypass");
+			completions.add("on");
+			completions.add("off");
+
+			return completions;
+		}
+		return null;
+	}
 }

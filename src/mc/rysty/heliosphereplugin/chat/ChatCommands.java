@@ -1,10 +1,14 @@
 package mc.rysty.heliosphereplugin.chat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,13 +18,14 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
 
-public class ChatCommands implements CommandExecutor, Listener {
+public class ChatCommands implements CommandExecutor, TabCompleter, Listener {
 
-	HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
-	FileConfiguration config = plugin.getConfig();
+	private HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
+	private FileConfiguration config = plugin.getConfig();
 
 	public ChatCommands(HelioSpherePlugin plugin) {
 		plugin.getCommand("chat").setExecutor(this);
+		plugin.getCommand("chat").setTabCompleter(this);
 	}
 
 	public static boolean muted = false;
@@ -42,7 +47,8 @@ public class ChatCommands implements CommandExecutor, Listener {
 						Bukkit.broadcastMessage("");
 					}
 					Bukkit.broadcastMessage(MessageUtils.chat(config.getString("ChatCommand.chat_cleared_message")));
-					Bukkit.getOnlinePlayers().forEach(players -> players.playSound(players.getLocation(), "block.note_block.harp", 2, 1));
+					Bukkit.getOnlinePlayers().forEach(
+							players -> players.playSound(players.getLocation(), "block.note_block.harp", 2, 1));
 				} else {
 					sender.sendMessage(MessageUtils.chat(config.getString("no_perm_message")));
 				}
@@ -52,29 +58,40 @@ public class ChatCommands implements CommandExecutor, Listener {
 					if (!muted) {
 						muted = true;
 						Bukkit.broadcastMessage(MessageUtils.chat(config.getString("ChatCommand.chat_locked_message")));
-						Bukkit.getOnlinePlayers().forEach(players -> players.playSound(players.getLocation(), "block.note_block.harp", 2, 1));
+						Bukkit.getOnlinePlayers().forEach(
+								players -> players.playSound(players.getLocation(), "block.note_block.harp", 2, 1));
 						for (Player o : Bukkit.getOnlinePlayers()) {
 							if (o.hasPermission("hs.chat.toggle")) {
-								if (!(o instanceof Player)) {	
-									o.sendMessage(MessageUtils.chat(config.getString("ChatCommand.chat_locked_staff_message")).replaceAll("<player>", ChatColor.YELLOW + sender.getName()));
-								} else if (o instanceof Player){
+								if (!(o instanceof Player)) {
+									o.sendMessage(
+											MessageUtils.chat(config.getString("ChatCommand.chat_locked_staff_message"))
+													.replaceAll("<player>", ChatColor.YELLOW + sender.getName()));
+								} else if (o instanceof Player) {
 									Player p = (Player) sender;
-									o.sendMessage(MessageUtils.chat(config.getString("ChatCommand.chat_locked_staff_message")).replaceAll("<player>", ChatColor.YELLOW + p.getDisplayName()));
+									o.sendMessage(
+											MessageUtils.chat(config.getString("ChatCommand.chat_locked_staff_message"))
+													.replaceAll("<player>", ChatColor.YELLOW + p.getDisplayName()));
 								}
 							}
 						}
 					} else if (muted) {
 						muted = false;
-						Bukkit.broadcastMessage(MessageUtils.chat(config.getString("ChatCommand.chat_unlocked_message")));
-						Bukkit.getOnlinePlayers().forEach(players -> players.playSound(players.getLocation(), "block.note_block.harp", 2, 1));
-						
+						Bukkit.broadcastMessage(
+								MessageUtils.chat(config.getString("ChatCommand.chat_unlocked_message")));
+						Bukkit.getOnlinePlayers().forEach(
+								players -> players.playSound(players.getLocation(), "block.note_block.harp", 2, 1));
+
 						for (Player o : Bukkit.getOnlinePlayers()) {
 							if (o.hasPermission("hs.chat.toggle")) {
 								if (!(o instanceof Player)) {
-									o.sendMessage(MessageUtils.chat(config.getString("ChatCommand.chat_unlocked_staff_message")).replaceAll("<player>", ChatColor.YELLOW + sender.getName()));
-								} else if (o instanceof Player){
+									o.sendMessage(MessageUtils
+											.chat(config.getString("ChatCommand.chat_unlocked_staff_message"))
+											.replaceAll("<player>", ChatColor.YELLOW + sender.getName()));
+								} else if (o instanceof Player) {
 									Player p = (Player) sender;
-									o.sendMessage(MessageUtils.chat(config.getString("ChatCommand.chat_unlocked_staff_message")).replaceAll("<player>", ChatColor.YELLOW + p.getDisplayName()));
+									o.sendMessage(MessageUtils
+											.chat(config.getString("ChatCommand.chat_unlocked_staff_message"))
+											.replaceAll("<player>", ChatColor.YELLOW + p.getDisplayName()));
 								}
 							}
 						}
@@ -100,6 +117,19 @@ public class ChatCommands implements CommandExecutor, Listener {
 			} else if (p.hasPermission("hs.chat.locked")) {
 				e.setCancelled(false);
 			}
-		} 
+		}
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		if (args.length == 1) {
+			List<String> completions = new ArrayList<>();
+
+			completions.add("clear");
+			completions.add("toggle");
+
+			return completions;
+		}
+		return null;
 	}
 }

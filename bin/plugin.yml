@@ -46,4 +46,8 @@ commands:
   versionlist:
     aliases: [verlist]
   mute:   
+  rename:
+  hat:
+  head:
+    aliases: [playerhead]
  

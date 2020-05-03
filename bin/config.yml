@@ -133,4 +133,16 @@ CommandMute:
   chat-error: "&4&l(!)&c You can not send messages when you are muted!"
   mute-message: "&6&l(!)&e <player>&e is <muted> muted"
   mute-message-target: "&6&l(!)&e You are <muted> muted."
+
+CommandHead:
+  head-message: "&6&l(!)&f You have received the player head of &e<player>&f."
+
+CommandHat:
+  hat-error: "&c&l(!)&f Air cannot be set as a hat."
+  hat-message: "&a&l(!)&f Your hat has been set."
+  hat-sender-message: "&6&l(!)&f The hat of &e<player>&f has been set."
+
+CommandRename:
+  rename-error: "&c&l(!)&f You must have an item in your hand to rename."
+  rename-message: "&a&l(!)&f Your main hand item has been renamed."
   

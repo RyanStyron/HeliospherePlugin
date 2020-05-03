@@ -17,6 +17,9 @@ import mc.rysty.heliosphereplugin.chat.SayCommand;
 import mc.rysty.heliosphereplugin.chat.StaffChat;
 import mc.rysty.heliosphereplugin.chat.UpdateDataYaml;
 import mc.rysty.heliosphereplugin.commands.CommandFeed;
+import mc.rysty.heliosphereplugin.commands.CommandHat;
+import mc.rysty.heliosphereplugin.commands.CommandHead;
+import mc.rysty.heliosphereplugin.commands.CommandRename;
 import mc.rysty.heliosphereplugin.commands.CommandVersionlist;
 import mc.rysty.heliosphereplugin.commands.Console;
 import mc.rysty.heliosphereplugin.commands.Fly;
@@ -78,6 +81,9 @@ public class HelioSpherePlugin extends JavaPlugin {
 		new Sudo(this);
 		new CommandFeed(this);
 		new CommandVersionlist(this);
+		new CommandRename(this);
+		new CommandHat(this);
+		new CommandHead(this);
 
 		new JoinLeaveMessages(this);
 		pluginManager.registerEvents(new UpdateDataYaml(), this);

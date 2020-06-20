@@ -26,7 +26,7 @@ public class CommandHat implements CommandExecutor {
 
                 if (args.length <= 1) {
                     if (args.length > 0) {
-                        if (sender.hasPermission("optimal.hat.other"))
+                        if (sender.hasPermission("hs.hat.other"))
                             target = Bukkit.getPlayer(args[0]);
                         else
                             MessageUtils.argumentError(sender, "/hat");

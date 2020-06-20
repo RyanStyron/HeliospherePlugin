@@ -2,6 +2,7 @@ package mc.rysty.heliosphereplugin.chat;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,21 +32,25 @@ public class StaffChat implements CommandExecutor, Listener {
 		if (command.getName().equalsIgnoreCase("staffchat")) {
 			if (sender instanceof Player) {
 				if (sender.hasPermission("hs.staffchat")) {
-					Player player = (Player) sender;
-					UUID playerId = player.getUniqueId();
-					String staffChatConfigString = data.getString("users." + playerId + ".staffchat");
+					if (sender.getServer().getPluginManager().isPluginEnabled("DiscordSRV-Staff-Chat"))
+						Bukkit.dispatchCommand(sender, "discordsrv-staff-chat:a");
+					else {
+						Player player = (Player) sender;
+						UUID playerId = player.getUniqueId();
+						String staffChatConfigString = data.getString("users." + playerId + ".staffchat");
 
-					if (args.length == 0) {
-						if (staffChatConfigString != null) {
-							data.set("users." + playerId + ".staffchat", null);
-							MessageUtils.configStringMessage(sender, "StaffChat.sc_disabled");
-						} else {
-							data.set("users." + playerId + ".staffchat.enabled", true);
-							MessageUtils.configStringMessage(sender, "StaffChat.sc_enabled");
+						if (args.length == 0) {
+							if (staffChatConfigString != null) {
+								data.set("users." + playerId + ".staffchat", null);
+								MessageUtils.configStringMessage(sender, "StaffChat.sc_disabled");
+							} else {
+								data.set("users." + playerId + ".staffchat.enabled", true);
+								MessageUtils.configStringMessage(sender, "StaffChat.sc_enabled");
+							}
+							settings.saveData();
+						} else if (args.length >= 1) {
+							MessageUtils.configStringMessage(sender, "StaffChat.arg_error");
 						}
-						settings.saveData();
-					} else if (args.length >= 1) {
-						MessageUtils.configStringMessage(sender, "StaffChat.arg_error");
 					}
 				} else
 					MessageUtils.noPermissionError(sender);
@@ -69,14 +74,16 @@ public class StaffChat implements CommandExecutor, Listener {
 			MessageUtils.broadcastMessage(config.getString("StaffChat.sc_message").replaceAll("<msg>", message)
 					.replaceAll("<player>", displayName), "hs.staffchat");
 		} else if (!message.startsWith("@ac")) {
-			if (data.getString("users." + playerId + ".staffchat") != null) {
-				if (player.hasPermission("hs.staffchat")) {
-					event.setCancelled(true);
-					MessageUtils.broadcastMessage(config.getString("StaffChat.sc_message").replaceAll("<msg>", message)
-							.replaceAll("<player>", displayName), "hs.staffchat");
-				} else {
-					data.set("users." + playerId + ".staffchat", null);
-					settings.saveData();
+			if (!player.getServer().getPluginManager().isPluginEnabled("DiscordSRV-Staff-Chat")) {
+				if (data.getString("users." + playerId + ".staffchat") != null) {
+					if (player.hasPermission("hs.staffchat")) {
+						event.setCancelled(true);
+						MessageUtils.broadcastMessage(config.getString("StaffChat.sc_message")
+								.replaceAll("<msg>", message).replaceAll("<player>", displayName), "hs.staffchat");
+					} else {
+						data.set("users." + playerId + ".staffchat", null);
+						settings.saveData();
+					}
 				}
 			}
 		}

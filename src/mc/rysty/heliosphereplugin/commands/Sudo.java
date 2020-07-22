@@ -24,12 +24,11 @@ public class Sudo implements CommandExecutor {
                     if (target != null) {
                         String sudoString = "";
 
-                        for (int i = 1; i < args.length; i++) {
+                        for (int i = 1; i < args.length; i++)
                             sudoString += args[i] + " ";
-                        }
 
                         if (sudoString.startsWith("/"))
-                            Bukkit.dispatchCommand(target, sudoString.replace("/", ""));
+                            target.performCommand(sudoString.replace("/", ""));
                         else
                             target.chat(MessageUtils.chat(sudoString));
 

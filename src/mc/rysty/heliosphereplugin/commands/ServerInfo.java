@@ -65,7 +65,7 @@ public class ServerInfo implements CommandExecutor {
 				MessageUtils.message(sender, "&6Whitelist Enabled: " + (server.hasWhitelist() ? "&aTrue" : "&cFalse"));
 				MessageUtils.message(sender, (!ChatCommands.muted ? "&6Chat Muted: &cFalse" : "&6Chat Muted: &aTrue"));
 				MessageUtils.message(sender,
-						(CommandSpy.CommandSpy ? "&6Command-Spy Enabled: &aTrue" : "Command-Spy Enabled: &cFalse"));
+						(CommandSpy.CommandSpy ? "&6Command-Spy Enabled: &aTrue" : "&6Command-Spy Enabled: &cFalse"));
 			} else
 				MessageUtils.configStringMessage(sender, "no_perm_message");
 		}

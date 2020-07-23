@@ -6,6 +6,7 @@ import org.bukkit.plugin.PluginManager;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
 public class VersionUtils {
@@ -29,11 +30,13 @@ public class VersionUtils {
     @SuppressWarnings("all")
     public static String getPlayerVersion(Player player) {
         if (hasProtocolSupport)
-            return ProtocolSupportAPI.getConnection(player).getVersion().getName();
+            return ProtocolSupportAPI.getProtocolVersion(player).getName();
+        if (hasViaVersion) {
+            int via = Via.getAPI().getPlayerVersion(player);
 
-        if (hasViaVersion)
-            return ProtocolVersion.getProtocol(Via.getAPI().getPlayerVersion(player)).getName(); 
-
+            if (via > ProtocolRegistry.SERVER_PROTOCOL)
+                return ProtocolVersion.getProtocol(via).getName();
+        }
         return getServerVersion();
     }
 

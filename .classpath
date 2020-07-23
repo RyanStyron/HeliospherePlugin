@@ -4,6 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/Owner/Downloads/Spigot Downloads/spigot-1.15.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Owner/AppData/Roaming/.minecraft/Plugins/ProtocolSupport-1.15.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Owner/AppData/Roaming/.minecraft/Plugins/ViaVersion-MC1.15.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Owner/AppData/Roaming/.minecraft/Plugins/ViaVersion-1.16.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

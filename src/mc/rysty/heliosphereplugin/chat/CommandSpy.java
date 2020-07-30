@@ -9,41 +9,31 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.utils.SettingsManager;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
 
 public class CommandSpy implements Listener {
 
-	HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
-	FileConfiguration config = plugin.getConfig();
-	SettingsManager settings = SettingsManager.getInstance();
-	FileConfiguration data = settings.getData();
+	private SettingsManager settings = SettingsManager.getInstance();
+	private FileConfiguration data = settings.getData();
 
-	public static boolean CommandSpy = true;
+	public static boolean commandSpyEnabled = true;
 
 	@EventHandler
-	public void commandSpy(PlayerCommandPreprocessEvent event) {
+	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 		UUID playerId = player.getUniqueId();
-		String pDName = player.getDisplayName();
-		String msg = event.getMessage();
+		String playerDisplayName = player.getDisplayName();
+		String message = event.getMessage();
 
 		for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 			UUID onlinePlayerId = onlinePlayer.getUniqueId();
 
-			if (CommandSpy) {
-				if (onlinePlayer.hasPermission("hs.commandspy")) {
-					if (data.getConfigurationSection("users." + onlinePlayerId + ".cmdspy.toggle") != null) {
-						if (data.getConfigurationSection("users." + playerId + ".cmdspy.bypass") == null) {
-							if (msg.startsWith("/")) {
-								onlinePlayer.sendMessage(MessageUtils.chat(config.getString("CommandSpy.message"))
-										.replaceAll("<player>", pDName).replaceAll("<cmd>", msg));
-							}
-						}
-					}
-				}
-			}
+			if (commandSpyEnabled && onlinePlayer.hasPermission("hs.commandspy") && message.startsWith("/"))
+				if (data.getBoolean("users." + onlinePlayerId + ".commandspy.enabled"))
+					if (data.getBoolean("users." + playerId + ".commandspy.bypass") != true)
+						MessageUtils.configStringMessage(onlinePlayer, "CommandSpy.message", "<player>",
+								playerDisplayName, "<cmd>", message);
 		}
 	}
 }

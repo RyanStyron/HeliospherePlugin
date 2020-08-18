@@ -71,6 +71,7 @@ public class AFK implements CommandExecutor, Listener {
 
 		if (playerAfkList.contains(player))
 			playerAfkList.remove(player);
+		playerTimeMap.put(player, 0);
 	}
 
 	@EventHandler
@@ -83,14 +84,16 @@ public class AFK implements CommandExecutor, Listener {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			@Override
 			public void run() {
-				playerTimeMap.put(player, playerTimeMap.get(player) + 1);
+				if (player.isOnline()) {
+					playerTimeMap.put(player, playerTimeMap.get(player) + 1);
 
-				if (playerTimeMap.get(player) >= 5) {
-					playerAfkList.add(player);
+					if (playerTimeMap.get(player) >= 5) {
+						playerAfkList.add(player);
 
-					if (!playerAfkMessageSent.get(player)) {
-						Bukkit.broadcastMessage(afkEnabledMessage.replaceAll("<player>", player.getDisplayName()));
-						playerAfkMessageSent.put(player, true);
+						if (!playerAfkMessageSent.get(player)) {
+							Bukkit.broadcastMessage(afkEnabledMessage.replaceAll("<player>", player.getDisplayName()));
+							playerAfkMessageSent.put(player, true);
+						}
 					}
 				}
 			}
@@ -115,7 +118,7 @@ public class AFK implements CommandExecutor, Listener {
 	private void removePlayerFromAfkList(Player player) {
 		playerTimeMap.put(player, 0);
 		playerAfkMessageSent.put(player, false);
-		
+
 		if (playerAfkList.contains(player)) {
 			playerAfkList.remove(player);
 			Bukkit.broadcastMessage(afkDisabledMessage.replaceAll("<player>", player.getDisplayName()));

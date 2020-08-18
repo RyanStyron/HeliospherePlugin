@@ -60,13 +60,13 @@ public class PlayerInfo implements CommandExecutor {
 						MessageUtils.message(sender, "&6Muted: "
 								+ (data.getString("users." + targetId + ".muted") != null ? "&aTrue" : "&cFalse"));
 						if (CommandSpy.commandSpyEnabled == true) {
-							String commandSpyToggle = data.getString("users." + targetId + ".cmdspy.toggle");
-							String commandSpyBypass = data.getString("users." + targetId + ".cmdspy.bypass");
+							boolean commandSpyEnabled = data.getBoolean("users." + targetId + ".commandspy.enabled");
+							boolean commandSpyBypass = data.getBoolean("users." + targetId + ".commandspy.bypass");
 
 							if (target.hasPermission("hs.commandspy")) {
-								MessageUtils.message(sender, commandSpyToggle != null ? "&6Command-Spy Enabled: &aTrue"
+								MessageUtils.message(sender, commandSpyEnabled ? "&6Command-Spy Enabled: &aTrue"
 										: "&6Command-Spy Enabled: &cFalse");
-								MessageUtils.message(sender, commandSpyBypass != null ? "&6Command-Spy Bypass: &aTrue"
+								MessageUtils.message(sender, commandSpyBypass ? "&6Command-Spy Bypass: &aTrue"
 										: "&6Command-Spy Bypass: &cFalse");
 							}
 						}

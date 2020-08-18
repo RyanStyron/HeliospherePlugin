@@ -1,10 +1,10 @@
 package mc.rysty.heliosphereplugin.chat;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,25 +14,27 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
-import mc.rysty.heliosphereplugin.utils.SettingsManager;
 
 public class AFK implements CommandExecutor, Listener {
 
 	private HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
 	private FileConfiguration config = plugin.getConfig();
-	private SettingsManager settings = SettingsManager.getInstance();
-	private FileConfiguration data = settings.getData();
 
 	public AFK(HelioSpherePlugin plugin) {
 		plugin.getCommand("afk").setExecutor(this);
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
-	private Server server = Bukkit.getServer();
+	private HashMap<Player, Integer> playerTimeMap = new HashMap<Player, Integer>();
+	private HashMap<Player, Boolean> playerAfkMessageSent = new HashMap<Player, Boolean>();
+	private List<Player> playerAfkList = new ArrayList<Player>();
+
 	private String afkDisabledMessage = MessageUtils.chat(config.getString("AFK.afk_disabled"));
 	private String afkEnabledMessage = MessageUtils.chat(config.getString("AFK.afk_enabled"));
 
@@ -40,91 +42,83 @@ public class AFK implements CommandExecutor, Listener {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (command.getName().equalsIgnoreCase("afk")) {
 			if (sender.hasPermission("hs.afk")) {
-				if (!(sender instanceof Player)) {
-					MessageUtils.message(sender, config.getString("console_error_message"));
-					return false;
-				}
-				Player player = (Player) sender;
-				UUID playerId = player.getUniqueId();
-				String displayName = player.getDisplayName();
+				if (sender instanceof Player) {
+					Player player = (Player) sender;
+					String displayName = player.getDisplayName();
 
-				if (args.length == 0) {
-					if (data.getString("users." + playerId + ".afk") == null) {
-						data.set("users." + playerId + ".afk", "true");
-						settings.saveData();
-						server.broadcastMessage(afkEnabledMessage.replaceAll("<player>", displayName));
-					} else if (data.getString("users." + playerId + ".afk") != null) {
-						data.set("users." + playerId + ".afk", null);
-						settings.saveData();
-						server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", displayName));
-					}
-				} else {
-					MessageUtils.message(player, config.getString("AFK.too_many_args"));
-				}
-			} else {
-				MessageUtils.message(sender, config.getString("no_perm_message"));
-			}
+					if (args.length == 0) {
+						if (!playerAfkList.contains(player)) {
+							playerAfkList.add(player);
+							Bukkit.broadcastMessage(afkEnabledMessage.replaceAll("<player>", displayName));
+						}
+						/*
+						 * An else statement is not required here because it is already handled by the
+						 * onPlayerCommandPreprocess(PlayerCommandPreprocessEvent) method.
+						 */
+					} else
+						MessageUtils.argumentError(sender, "/afk");
+				} else
+					MessageUtils.consoleError();
+			} else
+				MessageUtils.noPermissionError(sender);
 		}
 		return false;
 	}
 
 	@EventHandler
-	public void onPlayerUnactive(PlayerMoveEvent event) {
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+
+		if (playerAfkList.contains(player))
+			playerAfkList.remove(player);
+	}
+
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+
+		playerTimeMap.put(player, 0);
+		playerAfkMessageSent.put(player, false);
+
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				playerTimeMap.put(player, playerTimeMap.get(player) + 1);
+
+				if (playerTimeMap.get(player) >= 5) {
+					playerAfkList.add(player);
+
+					if (!playerAfkMessageSent.get(player)) {
+						Bukkit.broadcastMessage(afkEnabledMessage.replaceAll("<player>", player.getDisplayName()));
+						playerAfkMessageSent.put(player, true);
+					}
+				}
+			}
+		}, 0, 1200);
 	}
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		Player player = event.getPlayer();
-		UUID playerId = player.getUniqueId();
-		String displayName = player.getDisplayName();
-		Location toLocation = event.getTo();
-		Location fromLocation = event.getFrom();
-
-		if (toLocation.distanceSquared(fromLocation) >= 3) {
-			if (data.getString("users." + playerId + ".afk") != null) {
-				data.set("users." + playerId + ".afk", null);
-				settings.saveData();
-				server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", displayName));
-			}
-		}
+		removePlayerFromAfkList(event.getPlayer());
 	}
 
 	@EventHandler
-	public void onChatEvent(AsyncPlayerChatEvent event) {
-		Player player = event.getPlayer();
-		UUID pId = player.getUniqueId();
-		String pDName = player.getDisplayName();
-
-		if (data.getString("users." + pId + ".afk") != null) {
-			data.set("users." + pId + ".afk", null);
-			settings.saveData();
-			server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", pDName));
-		}
+	public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
+		removePlayerFromAfkList(event.getPlayer());
 	}
 
 	@EventHandler
-	public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
-		Player player = event.getPlayer();
-		UUID playerId = player.getUniqueId();
-		String displayName = player.getDisplayName();
-
-		if (event.getMessage().startsWith("/")) {
-			if (data.getString("users." + playerId + ".afk") != null) {
-				data.set("users." + playerId + ".afk", null);
-				settings.saveData();
-				server.broadcastMessage(afkDisabledMessage.replaceAll("<player>", displayName));
-			}
-		}
+	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+		removePlayerFromAfkList(event.getPlayer());
 	}
 
-	@EventHandler
-	public void onPlayerLeave(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		UUID playerId = player.getUniqueId();
-
-		if (data.getString("users." + playerId + ".afk") != null) {
-			data.set("users." + playerId + ".afk", null);
-			settings.saveData();
+	private void removePlayerFromAfkList(Player player) {
+		playerTimeMap.put(player, 0);
+		playerAfkMessageSent.put(player, false);
+		
+		if (playerAfkList.contains(player)) {
+			playerAfkList.remove(player);
+			Bukkit.broadcastMessage(afkDisabledMessage.replaceAll("<player>", player.getDisplayName()));
 		}
 	}
 }

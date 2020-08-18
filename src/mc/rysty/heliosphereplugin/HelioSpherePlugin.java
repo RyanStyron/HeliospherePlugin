@@ -99,7 +99,6 @@ public class HelioSpherePlugin extends JavaPlugin {
 		new ToggleBlockModify(this);
 		new Vanish(this);
 		pluginManager.registerEvents(new ChatCommands(this), this);
-		pluginManager.registerEvents(new AFK(this), this);
 		pluginManager.registerEvents(new ToggleBlockModify(this), this);
 		pluginManager.registerEvents(new Vanish(this), this);
 		new SignColors(this);

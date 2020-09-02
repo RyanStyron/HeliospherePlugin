@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
+@SuppressWarnings("deprecation")
 public class MessageBuilder {
 
     private List<MessageComponent> messageComponents = new ArrayList<>();
@@ -44,7 +45,8 @@ public class MessageBuilder {
         private List<BaseComponent> components = new ArrayList<>();
 
         public MessageComponent(String text) {
-            for (BaseComponent component : TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', text)))
+            for (BaseComponent component : TextComponent
+                    .fromLegacyText(ChatColor.translateAlternateColorCodes('&', text)))
                 components.add(component);
         }
 
@@ -56,7 +58,8 @@ public class MessageBuilder {
 
         public MessageComponent hoverEvent(HoverEvent.Action action, String string) {
             for (BaseComponent component : components)
-                component.setHoverEvent(new HoverEvent(action, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', string))));
+                component.setHoverEvent(new HoverEvent(action,
+                        TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', string))));
             return this;
         }
 

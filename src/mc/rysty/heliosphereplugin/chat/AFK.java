@@ -35,21 +35,18 @@ public class AFK implements CommandExecutor, Listener {
 	private HashMap<Player, Boolean> playerAfkMessageSent = new HashMap<Player, Boolean>();
 	private List<Player> playerAfkList = new ArrayList<Player>();
 
-	private String afkDisabledMessage = MessageUtils.chat(config.getString("AFK.afk_disabled"));
-	private String afkEnabledMessage = MessageUtils.chat(config.getString("AFK.afk_enabled"));
-
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (command.getName().equalsIgnoreCase("afk")) {
 			if (sender.hasPermission("hs.afk")) {
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
-					String displayName = player.getDisplayName();
 
 					if (args.length == 0) {
 						if (!playerAfkList.contains(player)) {
 							playerAfkList.add(player);
-							Bukkit.broadcastMessage(afkEnabledMessage.replaceAll("<player>", displayName));
+							playerTimeMap.put(player, 301);
+							sendAfkMessage(player, true);
 						}
 						/*
 						 * An else statement is not required here because it is already handled by the
@@ -71,7 +68,7 @@ public class AFK implements CommandExecutor, Listener {
 
 		if (playerAfkList.contains(player))
 			playerAfkList.remove(player);
-		playerTimeMap.put(player, 0);
+		playerTimeMap.remove(player);
 	}
 
 	@EventHandler
@@ -84,20 +81,18 @@ public class AFK implements CommandExecutor, Listener {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			@Override
 			public void run() {
-				if (player.isOnline()) {
+				if (player.isOnline() && playerTimeMap.get(player) < 300) {
 					playerTimeMap.put(player, playerTimeMap.get(player) + 1);
 
-					if (playerTimeMap.get(player) >= 5) {
+					if (playerTimeMap.get(player) == 300) {
 						playerAfkList.add(player);
 
-						if (!playerAfkMessageSent.get(player)) {
-							Bukkit.broadcastMessage(afkEnabledMessage.replaceAll("<player>", player.getDisplayName()));
-							playerAfkMessageSent.put(player, true);
-						}
+						if (!playerAfkMessageSent.get(player))
+							sendAfkMessage(player, true);
 					}
 				}
 			}
-		}, 0, 1200);
+		}, 0, 20);
 	}
 
 	@EventHandler
@@ -120,8 +115,20 @@ public class AFK implements CommandExecutor, Listener {
 		playerAfkMessageSent.put(player, false);
 
 		if (playerAfkList.contains(player)) {
+			sendAfkMessage(player, false);
 			playerAfkList.remove(player);
-			Bukkit.broadcastMessage(afkDisabledMessage.replaceAll("<player>", player.getDisplayName()));
 		}
+	}
+
+	private void sendAfkMessage(Player player, boolean isNowAfk) {
+		String displayName = player.getDisplayName();
+		String afkDisabledMessage = MessageUtils.chat(config.getString("AFK.afk_disabled"));
+		String afkEnabledMessage = MessageUtils.chat(config.getString("AFK.afk_enabled"));
+
+		if (isNowAfk) {
+			Bukkit.broadcastMessage(afkEnabledMessage.replaceAll("<player>", displayName));
+			playerAfkMessageSent.put(player, true);
+		} else
+			Bukkit.broadcastMessage(afkDisabledMessage.replace("<player>", displayName));
 	}
 }

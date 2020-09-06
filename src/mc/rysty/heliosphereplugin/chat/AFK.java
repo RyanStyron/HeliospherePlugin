@@ -14,7 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -27,6 +26,7 @@ public class AFK implements CommandExecutor, Listener {
 	private FileConfiguration config = plugin.getConfig();
 
 	public AFK(HelioSpherePlugin plugin) {
+		enableAfkScheduler();
 		plugin.getCommand("afk").setExecutor(this);
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -34,6 +34,31 @@ public class AFK implements CommandExecutor, Listener {
 	private HashMap<Player, Integer> playerTimeMap = new HashMap<Player, Integer>();
 	private HashMap<Player, Boolean> playerAfkMessageSent = new HashMap<Player, Boolean>();
 	private List<Player> playerAfkList = new ArrayList<Player>();
+
+	private void enableAfkScheduler() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					if (playerTimeMap.get(player) == null)
+						playerTimeMap.put(player, 0);
+					if (playerAfkMessageSent.get(player) == null)
+						playerAfkMessageSent.put(player, false);
+
+					if (playerTimeMap.get(player) < 300) {
+						playerTimeMap.put(player, playerTimeMap.get(player) + 1);
+
+						if (playerTimeMap.get(player) == 300) {
+							playerAfkList.add(player);
+
+							if (!playerAfkMessageSent.get(player))
+								sendAfkMessage(player, true);
+						}
+					}
+				}
+			}
+		}, 0, 20);
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -47,11 +72,11 @@ public class AFK implements CommandExecutor, Listener {
 							playerAfkList.add(player);
 							playerTimeMap.put(player, 301);
 							sendAfkMessage(player, true);
+							/*
+							 * This does not require an else statement because it is already handled by the
+							 * onPlayerCommandPreprocess(PlayerCommandPreprocessEvent) method.
+							 */
 						}
-						/*
-						 * An else statement is not required here because it is already handled by the
-						 * onPlayerCommandPreprocess(PlayerCommandPreprocessEvent) method.
-						 */
 					} else
 						MessageUtils.argumentError(sender, "/afk");
 				} else
@@ -69,30 +94,7 @@ public class AFK implements CommandExecutor, Listener {
 		if (playerAfkList.contains(player))
 			playerAfkList.remove(player);
 		playerTimeMap.remove(player);
-	}
-
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
-
-		playerTimeMap.put(player, 0);
-		playerAfkMessageSent.put(player, false);
-
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-			@Override
-			public void run() {
-				if (player.isOnline() && playerTimeMap.get(player) < 300) {
-					playerTimeMap.put(player, playerTimeMap.get(player) + 1);
-
-					if (playerTimeMap.get(player) == 300) {
-						playerAfkList.add(player);
-
-						if (!playerAfkMessageSent.get(player))
-							sendAfkMessage(player, true);
-					}
-				}
-			}
-		}, 0, 20);
+		playerAfkMessageSent.remove(player);
 	}
 
 	@EventHandler

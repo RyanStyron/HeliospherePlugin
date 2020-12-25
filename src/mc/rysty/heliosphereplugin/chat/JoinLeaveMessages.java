@@ -11,12 +11,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import mc.rysty.heliosphereplugin.HelioSpherePlugin;
 import mc.rysty.heliosphereplugin.utils.MessageBuilder;
 import mc.rysty.heliosphereplugin.utils.MessageUtils;
+import mc.rysty.heliosphereplugin.utils.SettingsManager;
 import net.md_5.bungee.api.chat.HoverEvent;
 
 public class JoinLeaveMessages implements Listener {
 
 	private HelioSpherePlugin plugin = HelioSpherePlugin.getInstance();
 	private FileConfiguration config = plugin.getConfig();
+	private static FileConfiguration dataFile = SettingsManager.getInstance().getData();
 
 	public JoinLeaveMessages(HelioSpherePlugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -28,16 +30,15 @@ public class JoinLeaveMessages implements Listener {
 			event.setJoinMessage(null);
 
 		Player player = event.getPlayer();
-		String name = player.getName();
-		String displayName = player.getDisplayName();
+		String displayName = dataFile.getString("users." + player.getUniqueId() + ".displayname");
 
 		if (!player.hasPlayedBefore())
-			MessageUtils.broadcastMessage(config.getString("firstJoin_message").replace("<player>", displayName)
-					.replaceAll("<server>", plugin.getServer().getName()), null);
+			MessageUtils.broadcastMessage(config.getString("firstJoin_message").replace("<player>", displayName), null);
 		else {
 			MessageBuilder builder = new MessageBuilder();
-			String joinMessage = config.getString("join_message").replace("<player>", displayName);
-			builder.append(joinMessage).hoverEvent(HoverEvent.Action.SHOW_TEXT, "&6" + name);
+
+			builder.append(config.getString("join_message").replace("<player>", displayName))
+					.hoverEvent(HoverEvent.Action.SHOW_TEXT, "&6" + player.getName());
 
 			for (Player onlinePlayers : Bukkit.getOnlinePlayers())
 				MessageUtils.message(onlinePlayers, builder.build());
@@ -51,8 +52,7 @@ public class JoinLeaveMessages implements Listener {
 
 		Player player = event.getPlayer();
 		String displayName = player.getDisplayName();
-		String message = config.getString("leave_message").replace("<player>", displayName);
 
-		MessageUtils.broadcastMessage(message, null);
+		MessageUtils.broadcastMessage(config.getString("leave_message").replace("<player>", displayName), null);
 	}
 }

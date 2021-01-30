@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -33,6 +34,7 @@ public class AFK implements CommandExecutor, Listener {
 
 	private HashMap<Player, Integer> playerTimeMap = new HashMap<Player, Integer>();
 	private HashMap<Player, Boolean> playerAfkMessageSent = new HashMap<Player, Boolean>();
+	private HashMap<Player, Location> playerAfkLocationMap = new HashMap<Player, Location>();
 	private List<Player> playerAfkList = new ArrayList<Player>();
 
 	private void enableAfkScheduler() {
@@ -50,6 +52,7 @@ public class AFK implements CommandExecutor, Listener {
 
 						if (playerTimeMap.get(player) == 300) {
 							playerAfkList.add(player);
+							playerAfkLocationMap.put(player, player.getLocation());
 
 							if (!playerAfkMessageSent.get(player))
 								sendAfkMessage(player, true);
@@ -95,11 +98,22 @@ public class AFK implements CommandExecutor, Listener {
 			playerAfkList.remove(player);
 		playerTimeMap.remove(player);
 		playerAfkMessageSent.remove(player);
+		playerAfkLocationMap.remove(player);
 	}
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		removePlayerFromAfkList(event.getPlayer());
+		Player player = event.getPlayer();
+		Location location = player.getLocation();
+
+		if (!playerAfkList.contains(player))
+			playerTimeMap.put(player, 0);
+		else {
+			Location storedLocation = playerAfkLocationMap.get(player);
+
+			if (location.getWorld() == storedLocation.getWorld() && location.distanceSquared(storedLocation) > 3)
+				removePlayerFromAfkList(player);
+		}
 	}
 
 	@EventHandler
@@ -119,6 +133,7 @@ public class AFK implements CommandExecutor, Listener {
 		if (playerAfkList.contains(player)) {
 			sendAfkMessage(player, false);
 			playerAfkList.remove(player);
+			playerAfkLocationMap.remove(player);
 		}
 	}
 
